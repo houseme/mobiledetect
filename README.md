@@ -13,7 +13,7 @@ The package is imported from [MobileDetect](http://www.mobiledetect.net) which w
 
 ### Installation 
 
-     go get github.com/Shaked/gomobiledetect 
+     go get -u -v github.com/housemecn/go-mobile-detect 
 
 ### Updates 
 
