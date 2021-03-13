@@ -32,7 +32,6 @@ script:
   - diff <(gofmt -d .) <(echo -n)
   - go vet -x ./...
   - golint -set_exit_status ./...
-  - GOARCH=amd64 go test -v ./... -coverprofile=coverage.txt -covermode=atomic
   - go test
 
 after_success:
