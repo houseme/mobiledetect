@@ -2,8 +2,8 @@ GoMobileDetect
 ==============
 
 [![GoDoc](https://godoc.org/github.com/housemecn/go-mobile-detect?status.png)](https://godoc.org/github.com/housemecn/go-mobile-detect)
-[![Build Status](https://travis-ci.org/housemecn/go-mobile-detect.png?branch=master)](https://travis-ci.org/housemecn/go-mobile-detect)
-[![Coverage Status](https://coveralls.io/repos/housemecn/go-mobile-detect/badge.png)](https://coveralls.io/r/housemecn/go-mobile-detect)
+[![Build Status](https://travis-ci.org/housemecn/go-mobile-detect.svg?branch=main)](https://travis-ci.org/housemecn/go-mobile-detect)
+[![Coverage Status](https://coveralls.io/repos/github/housemecn/go-mobile-detect/badge.svg)](https://coveralls.io/github/housemecn/go-mobile-detect)
 
 ### Description
 
