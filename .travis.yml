@@ -27,6 +27,7 @@ before_install:
 
 install:
   - go get -v .
+  - go get -v golang.org/x/lint/golint
 
 script:
   - diff <(gofmt -d .) <(echo -n)

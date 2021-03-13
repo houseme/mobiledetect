@@ -1,7 +1,7 @@
 GoMobileDetect
 ==============
 
-[![GoDoc](https://godoc.org/github.com/housemecn/go-mobile-detect?status.png)](https://godoc.org/github.com/housemecn/go-mobile-detect)
+[![Go Reference](https://pkg.go.dev/badge/github.com/housemecn/go-mobile-detect.svg)](https://pkg.go.dev/github.com/housemecn/go-mobile-detect)
 [![Build Status](https://travis-ci.org/housemecn/go-mobile-detect.svg?branch=main)](https://travis-ci.org/housemecn/go-mobile-detect)
 [![Coverage Status](https://coveralls.io/repos/github/housemecn/go-mobile-detect/badge.svg)](https://coveralls.io/github/housemecn/go-mobile-detect)
 
@@ -25,9 +25,9 @@ The package is imported from [MobileDetect](http://www.mobiledetect.net) which w
 There are different ways of using the package: 
 
 - [Basic usage](examples/app.go) 
-- [Basic router implementation](examples/router.go)
-- [Handler interface implementation](examples/app_handler.go)
-- [Mux interface implementation](examples/app_mux.go)
+- [Basic router implementation](examples/router/main.go)
+- [Handler interface implementation](examples/handler/main.go)
+- [Mux interface implementation](examples/mux/main.go)
 
 ### License
 
