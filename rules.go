@@ -726,7 +726,6 @@ var (
 		//PaleMoon:
 		`Android.*PaleMoon|Mobile.*PaleMoon`,
 	}
-
 	utilities = [...]string{
 		// Experimental. When a mobile device wants to switch to 'Desktop Mode'.
 		// http://scottcate.com/technology/windows-phone-8-ie10-desktop-or-mobile/
@@ -748,7 +747,6 @@ var (
 		//Watch
 		`SM-V700`,
 	}
-
 	nameToKey = map[string]int{
 		`iphone`:            IPHONE,
 		`blackberry`:        BLACKBERRY,
