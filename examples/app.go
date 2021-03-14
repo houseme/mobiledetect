@@ -16,9 +16,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "is(request)?", requestValue, " ", detect.Is(requestValue))
 	fmt.Fprintln(w, "isKey(request)?", requestValue, " ", detect.IsKey(mobiledetect.IPHONE))
 	fmt.Fprintln(w, "Version: ", detect.Version(requestValue))
-	fmt.Fprintln(w, "VersionKey: ", detect.Version(mobiledetect.PROP_IPHONE))
+	fmt.Fprintln(w, "VersionKey: ", detect.Version(mobiledetect.PropIphone))
 	fmt.Fprintln(w, "VersionFloat: ", detect.Version(requestValue))
-	fmt.Fprintln(w, "VersionFloatKey: ", detect.Version(mobiledetect.PROP_IPHONE))
+	fmt.Fprintln(w, "VersionFloatKey: ", detect.Version(mobiledetect.PropIphone))
 }
 
 func main() {

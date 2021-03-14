@@ -15,94 +15,94 @@ import (
 // @Package go_mobile_detect
 
 const (
-	PROP_MOBILE = iota
-	PROP_BUILD
-	PROP_VERSION
-	PROP_VENDORID
-	PROP_IPAD
-	PROP_IPHONE
-	PROP_IPOD
-	PROP_KINDLE
-	PROP_CHROME
-	PROP_COAST
-	PROP_DOLFIN
-	PROP_FIREFOX
-	PROP_FENNEC
-	PROP_IE
-	PROP_NETFRONT
-	PROP_NOKIABROWSER
-	PROP_OPERA
-	PROP_OPERA_MINI
-	PROP_OPERA_MOBI
-	PROP_UC_BROWSER
-	PROP_MQQBROWSER
-	PROP_MICROMESSENGER
-	PROP_BAIDUBOXAPP
-	PROP_BAIDUBROWSER
-	PROP_SAFARI
-	PROP_SKYFIRE
-	PROP_TIZEN
-	PROP_WEBKIT
-	PROP_GECKO
-	PROP_TRIDENT
-	PROP_PRESTO
-	PROP_IOS
-	PROP_ANDROID
-	PROP_BLACKBERRY
-	PROP_BREW
-	PROP_JAVA
-	PROP_WINDOWS_PHONE_OS
-	PROP_WINDOWS_PHONE
-	PROP_WINDOWS_CE
-	PROP_WINDOWS_NT
-	PROP_SYMBIAN
-	PROP_WEBOS
+	PropMobile = iota
+	PropBuild
+	PropVersion
+	PropVendorid
+	PropIpad
+	PropIphone
+	PropIpod
+	PropKindle
+	PropChrome
+	PropCoast
+	PropDolfin
+	PropFirefox
+	PropFennec
+	PropIe
+	PropNetfront
+	PropNokiabrowser
+	PropOpera
+	PropOperaMini
+	PropOperaMobi
+	PropUcBrowser
+	PropMqqbrowser
+	PropMicromessenger
+	PropBaiduboxapp
+	PropBaidubrowser
+	PropSafari
+	PropSkyfire
+	PropTizen
+	PropWebkit
+	PropGecko
+	PropTrident
+	PropPresto
+	PropIos
+	PropAndroid
+	PropBlackberry
+	PropBrew
+	PropJava
+	PropWindowsPhoneOs
+	PropWindowsPhone
+	PropWindowsCe
+	PropWindowsNt
+	PropSymbian
+	PropWebos
 )
 
 var (
 	propertiesNameToVal = map[string]int{
-		"mobile":           PROP_MOBILE,
-		"build":            PROP_BUILD,
-		"version":          PROP_VERSION,
-		"vendorid":         PROP_VENDORID,
-		"ipad":             PROP_IPAD,
-		"iphone":           PROP_IPHONE,
-		"ipod":             PROP_IPOD,
-		"kindle":           PROP_KINDLE,
-		"chrome":           PROP_CHROME,
-		"coast":            PROP_COAST,
-		"dolfin":           PROP_DOLFIN,
-		"firefox":          PROP_FIREFOX,
-		"fennec":           PROP_FENNEC,
-		"ie":               PROP_IE,
-		"netfront":         PROP_NETFRONT,
-		"nokiabrowser":     PROP_NOKIABROWSER,
-		"opera":            PROP_OPERA,
-		"opera mini":       PROP_OPERA_MINI,
-		"opera mobi":       PROP_OPERA_MOBI,
-		"uc browser":       PROP_UC_BROWSER,
-		"mqqbrowser":       PROP_MQQBROWSER,
-		"micromessenger":   PROP_MICROMESSENGER,
-		"baiduboxapp":      PROP_BAIDUBOXAPP,
-		"baidubrowser":     PROP_BAIDUBROWSER,
-		"safari":           PROP_SAFARI,
-		"skyfire":          PROP_SKYFIRE,
-		"tizen":            PROP_TIZEN,
-		"webkit":           PROP_WEBKIT,
-		"gecko":            PROP_GECKO,
-		"trident":          PROP_TRIDENT,
-		"presto":           PROP_PRESTO,
-		"ios":              PROP_IOS,
-		"android":          PROP_ANDROID,
-		"blackberry":       PROP_BLACKBERRY,
-		"brew":             PROP_BREW,
-		"java":             PROP_JAVA,
-		"windows phone os": PROP_WINDOWS_PHONE_OS,
-		"windows phone":    PROP_WINDOWS_PHONE,
-		"windows ce":       PROP_WINDOWS_CE,
-		"windows nt":       PROP_WINDOWS_NT,
-		"symbian":          PROP_SYMBIAN,
-		"webos":            PROP_WEBOS,
+		"mobile":           PropMobile,
+		"build":            PropBuild,
+		"version":          PropVersion,
+		"vendorid":         PropVendorid,
+		"ipad":             PropIpad,
+		"iphone":           PropIphone,
+		"ipod":             PropIpod,
+		"kindle":           PropKindle,
+		"chrome":           PropChrome,
+		"coast":            PropCoast,
+		"dolfin":           PropDolfin,
+		"firefox":          PropFirefox,
+		"fennec":           PropFennec,
+		"ie":               PropIe,
+		"netfront":         PropNetfront,
+		"nokiabrowser":     PropNokiabrowser,
+		"opera":            PropOpera,
+		"opera mini":       PropOperaMini,
+		"opera mobi":       PropOperaMobi,
+		"uc browser":       PropUcBrowser,
+		"mqqbrowser":       PropMqqbrowser,
+		"micromessenger":   PropMicromessenger,
+		"baiduboxapp":      PropBaiduboxapp,
+		"baidubrowser":     PropBaidubrowser,
+		"safari":           PropSafari,
+		"skyfire":          PropSkyfire,
+		"tizen":            PropTizen,
+		"webkit":           PropWebkit,
+		"gecko":            PropGecko,
+		"trident":          PropTrident,
+		"presto":           PropPresto,
+		"ios":              PropIos,
+		"android":          PropAndroid,
+		"blackberry":       PropBlackberry,
+		"brew":             PropBrew,
+		"java":             PropJava,
+		"windows phone os": PropWindowsPhoneOs,
+		"windows phone":    PropWindowsPhone,
+		"windows ce":       PropWindowsCe,
+		"windows nt":       PropWindowsNt,
+		"symbian":          PropSymbian,
+		"webos":            PropWebos,
 	}
 
 	// Properties helps parsing User Agent string, extracting useful segments of text.

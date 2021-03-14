@@ -363,7 +363,7 @@ func VersionData() []versionDataStruct {
 		},
 		versionDataStruct{
 			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`,
-			property:     PROP_ANDROID,
+			property:     PropAndroid,
 			strVersion:   ``,
 			floatVersion: 0.0,
 		},
@@ -494,6 +494,6 @@ func BenchmarkVersionKey(b *testing.B) {
 	detect := NewMobileDetect(req, nil)
 	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
-		detect.VersionKey(PROP_IPHONE)
+		detect.VersionKey(PropIphone)
 	}
 }
