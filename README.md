@@ -13,7 +13,7 @@ Go-Mobile-Detect
 
 Go-Mobile-Detect is a lightweight package imported from PHP for detecting mobile devices including tablets. 
 
-The package is imported from [MobileDetect](http://www.md.net) which was originally written in PHP.
+The package is imported from [MobileDetect](http://mobiledetect.net/) which was originally written in PHP.
 
 ### Installation 
 
