@@ -1,13 +1,12 @@
 Go-Mobile-Detect
 ==============
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/housemecn/go-mobile-detect.svg)](https://pkg.go.dev/github.com/housemecn/go-mobile-detect)
-[![Build Status](https://travis-ci.org/housemecn/go-mobile-detect.svg?branch=main)](https://travis-ci.org/housemecn/go-mobile-detect)
-[![Coverage Status](https://coveralls.io/repos/github/housemecn/go-mobile-detect/badge.svg)](https://coveralls.io/github/housemecn/go-mobile-detect)
-![GitHub](https://img.shields.io/github/license/housemecn/go-mobile-detect?style=plastic)
-![GitHub go.mod Go version (branch)](https://img.shields.io/github/go-mod/go-version/housemecn/go-mobile-detect/main?style=flat-square)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/housemecn/go-mobile-detect?style=flat-square)
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/housemecn/go-mobile-detect?style=flat-square)
+[![Go Reference](https://pkg.go.dev/badge/github.com/houseme/go-mobile-detect.svg)](https://pkg.go.dev/github.com/houseme/go-mobile-detect)
+[![Go](https://github.com/houseme/go-mobile-detect/actions/workflows/go.yml/badge.svg)](https://github.com/housemecn/go-mobile-detect/actions/workflows/go.yml)
+![GitHub](https://img.shields.io/github/license/houseme/go-mobile-detect?style=plastic)
+![GitHub go.mod Go version (branch)](https://img.shields.io/github/go-mod/go-version/houseme/go-mobile-detect/main?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/houseme/go-mobile-detect?style=flat-square)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/houseme/go-mobile-detect?style=flat-square)
 
 ### Description
 
@@ -17,7 +16,7 @@ The package is imported from [MobileDetect](http://mobiledetect.net/) which was 
 
 ### Installation 
 
-     go get -u -v github.com/housemecn/go-mobile-detect 
+     go get -u -v github.com/houseme/go-mobile-detect 
 
 ### Updates 
 

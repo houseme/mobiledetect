@@ -17,7 +17,7 @@ import (
 // @Package go_mobile_detect
 
 const (
-	//A frequently used regular expression to extract version #s.
+	// A frequently used regular expression to extract version #s.
 	verRegex = `([\w._\+]+)`
 
 	// MobileGradeA .
@@ -212,8 +212,8 @@ func (md *MobileDetect) Version(propertyName interface{}) string {
 	return ""
 }
 
-//Search for a certain key in the rules array.
-//If the key is found the try to match the corresponding regex agains the User-Agent.
+// Search for a certain key in the rules array.
+// If the key is found the try to match the corresponding regex agains the User-Agent.
 func (md *MobileDetect) matchUAAgainstKey(key int) bool {
 	ret := false
 	rules := md.rules.mobileDetectionRules()
@@ -227,7 +227,7 @@ func (md *MobileDetect) matchUAAgainstKey(key int) bool {
 	return ret
 }
 
-//Find a detection rule that matches the current User-agent.
+// Find a detection rule that matches the current User-agent.
 func (md *MobileDetect) matchDetectionRulesAgainstUA() bool {
 	for _, ruleValue := range md.rules.mobileDetectionRules() {
 		if "" != ruleValue {
@@ -245,8 +245,8 @@ func (md *MobileDetect) matchDetectionRulesAgainstUA() bool {
 // This method will be used to check custom regexes against the User-Agent string.
 // @todo: search in the HTTP headers too.
 func (md *MobileDetect) match(ruleValue string) bool {
-	//Escape the special character which is the delimiter
-	//rule = strings.Replace(rule, `\`, `\/`, -1)
+	// Escape the special character which is the delimiter
+	// rule = strings.Replace(rule, `\`, `\/`, -1)
 	ruleValue = `(?is)` + ruleValue
 	var re *regexp.Regexp
 	re = md.compiledRegexRules[ruleValue]

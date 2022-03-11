@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"regexp"
 
-	md "github.com/housemecn/go-mobile-detect"
+	md "github.com/houseme/go-mobiledetect"
 )
 
-//route manager
+// route manager
 type route struct {
 	re      *regexp.Regexp
 	handler func(http.ResponseWriter, *http.Request, []string, *md.MobileDetect)

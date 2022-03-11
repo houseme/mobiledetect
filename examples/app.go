@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	md "github.com/housemecn/go-mobile-detect"
+	md "github.com/housemecn/go-mobiledetect"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {

@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	md "github.com/housemecn/go-mobile-detect"
+	md "github.com/houseme/go-mobiledetect"
 )
 
 // Handler .
