@@ -45,7 +45,7 @@ func main() {
     }
 
     for _, s := range userAgents {
-        ua := ua.ParseUA(s)
+        ua := ua.New(s)
         fmt.Println()
         fmt.Println(ua.UA())
         fmt.Println(strings.Repeat("=", len(ua.UA())))
