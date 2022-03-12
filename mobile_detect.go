@@ -1,4 +1,4 @@
-package detect
+package mobiledetect
 
 import (
 	"context"
@@ -8,13 +8,13 @@ import (
 	"strings"
 )
 
-// @Project: go-mobile-detect
+// @Project: mobile-detect
 // @Author: houseme
 // @Description:
 // @File: mobile_detect
 // @Version: 1.0.0
 // @Date: 2021/3/13 20:27
-// @Package go_mobile_detect
+// @Package mobiledetect
 
 const (
 	// A frequently used regular expression to extract version #s.
@@ -47,7 +47,7 @@ type DeviceHandler interface {
 // Handler .
 func Handler(h DeviceHandler, rules *rules) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		m := NewMobileDetect(r, rules)
+		m := New(r, rules)
 		if m.IsTablet() {
 			h.Tablet(w, r, m)
 		} else if m.IsMobile() {
@@ -61,7 +61,7 @@ func Handler(h DeviceHandler, rules *rules) http.Handler {
 // HandlerMux .
 func HandlerMux(s *http.ServeMux, rules *rules) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		m := NewMobileDetect(r, rules)
+		m := New(r, rules)
 		if m.IsTablet() {
 			r = r.WithContext(context.WithValue(r.Context(), "Device", "Tablet"))
 		} else if m.IsMobile() {
@@ -79,11 +79,11 @@ type MobileDetect struct {
 	userAgent          string
 	httpHeaders        map[string]string
 	compiledRegexRules map[string]*regexp.Regexp
-	*properties
+	*ua.properties
 }
 
-// NewMobileDetect creates the MobileDetect object
-func NewMobileDetect(r *http.Request, rules *rules) *MobileDetect {
+// New creates the MobileDetect object
+func New(r *http.Request, rules *rules) *MobileDetect {
 	if nil == rules {
 		rules = NewRules()
 	}
@@ -148,7 +148,7 @@ func (md *MobileDetect) IsMobile() bool {
 	return md.matchDetectionRulesAgainstUA()
 }
 
-// IsTablet IsTablet is a specific case to detect only Tablet browsers on tablets. Do not overlap with IsTablet
+// IsTablet is a specific case of detect only Tablet browsers on tablets. Do not overlap with IsTablet
 func (md *MobileDetect) IsTablet() bool {
 	for _, ruleValue := range md.rules.tabletDevices {
 		if md.match(ruleValue) {

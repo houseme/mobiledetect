@@ -1,3 +1,3 @@
-module github.com/houseme/go-mobiledetect
+module github.com/houseme/mobiledetect
 
 go 1.16

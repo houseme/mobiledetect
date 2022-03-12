@@ -17,7 +17,9 @@
 
 ### Installation 
 
-     go get -u -v github.com/houseme/go-mobiledetect 
+```shell
+    go get -u -v github.com/houseme/mobiledetect 
+```
 
 ### Updates 
 

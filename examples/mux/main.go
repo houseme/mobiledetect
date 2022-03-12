@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	md "github.com/houseme/go-mobiledetect"
+	"github.com/houseme/mobiledetect"
 )
 
 // Handler .
@@ -13,7 +13,7 @@ type Handler struct{}
 
 // ServeHTTP .
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "%#v", md.Device(r))
+	fmt.Fprintf(w, "%#v", mobiledetect.Device(r))
 }
 
 func main() {
@@ -21,5 +21,5 @@ func main() {
 	mux := http.NewServeMux()
 	h := &Handler{}
 	mux.Handle("/check", h)
-	http.ListenAndServe(":10001", md.HandlerMux(mux, nil))
+	http.ListenAndServe(":10001", mobiledetect.HandlerMux(mux, nil))
 }

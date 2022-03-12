@@ -1,4 +1,4 @@
-package detect
+package mobiledetect
 
 import (
 	"fmt"
@@ -1070,7 +1070,7 @@ func TestMobileGrade(t *testing.T) {
 				true,
 				"",
 			}
-			detect := NewMobileDetect(httpRequest, nil)
+			detect := New(httpRequest, nil)
 			detect.SetUserAgent(userAgent)
 			detectedGrade := detect.MobileGrade()
 			if expectedGrade != detectedGrade {

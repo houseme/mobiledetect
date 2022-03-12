@@ -1,4 +1,4 @@
-package detect
+package mobiledetect
 
 import "testing"
 

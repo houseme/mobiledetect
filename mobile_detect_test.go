@@ -1,4 +1,4 @@
-package detect
+package mobiledetect
 
 import (
 	"log"
@@ -204,7 +204,7 @@ func BasicMethodsData() []basicMethodsStruct {
 }
 
 func TestBasicMethods(t *testing.T) {
-	detect := NewMobileDetect(httpRequest, nil)
+	detect := New(httpRequest, nil)
 	for _, data := range BasicMethodsData() {
 		detect.SetHTTPHeaders(data.httpHeaders)
 
@@ -248,7 +248,7 @@ func TestBasicMethods(t *testing.T) {
 	}
 }
 
-//special headers that give `quick` indication that a device is mobile
+// special headers that give `quick` indication that a device is mobile
 func QuickHeadersData() []map[string]string {
 	headers := []map[string]string{
 		map[string]string{`HTTP_ACCEPT`: `application/json; q=0.2, application/x-obml2d; q=0.8, image/gif; q=0.99, */*`},
@@ -273,7 +273,7 @@ func QuickHeadersData() []map[string]string {
 }
 
 func TestQuickHeaders(t *testing.T) {
-	detect := NewMobileDetect(httpRequest, nil)
+	detect := New(httpRequest, nil)
 	detect.PreCompileRegexRules()
 	for _, httpHeaders := range QuickHeadersData() {
 		detect.SetHTTPHeaders(httpHeaders)
@@ -295,7 +295,7 @@ func QuickNonMobileHeadersData() []map[string]string {
 }
 
 func TestNonMobileQuickHeaders(t *testing.T) {
-	detect := NewMobileDetect(httpRequest, nil)
+	detect := New(httpRequest, nil)
 	for _, httpHeaders := range QuickNonMobileHeadersData() {
 		detect.SetHTTPHeaders(httpHeaders)
 		if false != detect.CheckHTTPHeadersForMobile() {
@@ -371,9 +371,9 @@ func VersionData() []versionDataStruct {
 	return v
 }
 
-//todo: check if this test is testing the code or testing that the data is correct
+// todo: check if this test is testing the code or testing that the data is correct
 func TestVersionExtraction(t *testing.T) {
-	detect := NewMobileDetect(httpRequest, nil)
+	detect := New(httpRequest, nil)
 
 	for _, data := range VersionData() {
 		userAgent := data.userAgent
@@ -395,7 +395,7 @@ func TestVersionExtraction(t *testing.T) {
 }
 
 func TestPreCompileRegexRules(t *testing.T) {
-	detect := NewMobileDetect(httpRequest, nil)
+	detect := New(httpRequest, nil)
 	detect.PreCompileRegexRules()
 	e := len(detect.rules.mobileDetectionRules())
 	c := len(detect.compiledRegexRules)
@@ -457,7 +457,7 @@ func TestHandlerMux(t *testing.T) {
 
 func BenchmarkIsMobile(b *testing.B) {
 	req, _ := http.NewRequest("GET", "URL", strings.NewReader(""))
-	detect := NewMobileDetect(req, nil)
+	detect := New(req, nil)
 	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
 		detect.IsMobile()
@@ -466,7 +466,7 @@ func BenchmarkIsMobile(b *testing.B) {
 
 func BenchmarkIs(b *testing.B) {
 	req, _ := http.NewRequest("GET", "URL", strings.NewReader(""))
-	detect := NewMobileDetect(req, nil)
+	detect := New(req, nil)
 	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
 		detect.Is("iphone")
@@ -474,7 +474,7 @@ func BenchmarkIs(b *testing.B) {
 }
 func BenchmarkIsKey(b *testing.B) {
 	req, _ := http.NewRequest("GET", "URL", strings.NewReader(""))
-	detect := NewMobileDetect(req, nil)
+	detect := New(req, nil)
 	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
 		detect.IsKey(IPHONE)
@@ -483,7 +483,7 @@ func BenchmarkIsKey(b *testing.B) {
 
 func BenchmarkVersion(b *testing.B) {
 	req, _ := http.NewRequest("GET", "URL", strings.NewReader(""))
-	detect := NewMobileDetect(req, nil)
+	detect := New(req, nil)
 	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
 		detect.Version("iphone")
@@ -491,7 +491,7 @@ func BenchmarkVersion(b *testing.B) {
 }
 func BenchmarkVersionKey(b *testing.B) {
 	req, _ := http.NewRequest("GET", "URL", strings.NewReader(""))
-	detect := NewMobileDetect(req, nil)
+	detect := New(req, nil)
 	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
 		detect.VersionKey(PropIphone)

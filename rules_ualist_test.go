@@ -1,4 +1,4 @@
-package detect
+package mobiledetect
 
 import (
 	"fmt"
@@ -9105,7 +9105,7 @@ func TestUaList(t *testing.T) {
 				result.message = userAgent
 				result.skipped = true
 			} else {
-				detect := NewMobileDetect(httpRequest, nil)
+				detect := New(httpRequest, nil)
 				detect.SetUserAgent(userAgent)
 				isMobile := detect.IsMobile()
 

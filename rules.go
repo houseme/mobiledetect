@@ -1,7 +1,7 @@
-package detect
+package mobiledetect
 
-// Upstream Version: 2.8.37
-// https://github.com/serbanghita/Mobile-Detect/blob/2.8.37/Mobile_Detect.php
+// Upstream Version: 2.8.39
+// https://github.com/serbanghita/Mobile-Detect/blob/2.8.39/Mobile_Detect.php
 
 const (
 	IPHONE = iota
