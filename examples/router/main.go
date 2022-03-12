@@ -40,8 +40,8 @@ func (h *RouterHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 func homepageHandler(w http.ResponseWriter, r *http.Request, matches []string, detect *mobiledetect.MobileDetect) {
 	fmt.Fprint(w, "Hello World\n")
 	fmt.Fprintf(w, "Matches %+v\n", matches)
-	fmt.Fprintf(w, "Is Mobile? %+v\n", detect.IsMobile())
-	fmt.Fprintf(w, "Is Tablet? %+v\n", detect.IsTablet())
+	fmt.Fprintf(w, "Is mobile? %+v\n", detect.IsMobile())
+	fmt.Fprintf(w, "Is tablet? %+v\n", detect.IsTablet())
 }
 
 func main() {

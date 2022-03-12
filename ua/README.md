@@ -47,26 +47,51 @@ func main() {
     for _, s := range userAgents {
         ua := ua.Parse(s)
         fmt.Println()
-        fmt.Println(ua.String)
-        fmt.Println(strings.Repeat("=", len(ua.String)))
+        fmt.Println(ua.UA())
+        fmt.Println(strings.Repeat("=", len(ua.UA())))
         fmt.Println("Name:", ua.Name, "v", ua.Version)
-        fmt.Println("OS:", ua.OS, "v", ua.OSVersion)
+        fmt.Println("OS:", ua.OS(), "v", ua.OSVersion())
         fmt.Println("Device:", ua.Device)
-        if ua.Mobile {
+        if ua.Mobile() {
             fmt.Println("(Mobile)")
         }
-        if ua.Tablet {
+        if ua.Tablet() {
             fmt.Println("(Tablet)")
         }
-        if ua.Desktop {
+        if ua.Desktop() {
             fmt.Println("(Desktop)")
         }
-        if ua.Bot {
+        if ua.Bot() {
             fmt.Println("(Bot)")
         }
         if ua.URL != "" {
             fmt.Println(ua.URL)
         }
+        fmt.Printf("%v\n", ua.Mobile())   // => true
+        fmt.Printf("%v\n", ua.Bot())      // => false
+        fmt.Printf("%v\n", ua.Mozilla())  // => "5.0"
+        fmt.Printf("%v\n", ua.Model())    // => "Nexus One"
+    
+        fmt.Printf("%v\n", ua.Platform()) // => "Linux"
+        fmt.Printf("%v\n", ua.OS())       // => "Android 2.3.7"
+    
+        name, version := ua.Engine()
+        fmt.Printf("%v\n", name)          // => "AppleWebKit"
+        fmt.Printf("%v\n", version)       // => "533.1"
+    
+        name, version = ua.Browser()
+        fmt.Printf("%v\n", name)          // => "Android"
+        fmt.Printf("%v\n", version)       // => "4.0"
+    
+        // Let's see an example with a bot.
+    
+        ua.Parse("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+    
+        fmt.Printf("%v\n", ua.Bot())      // => true
+    
+        name, version = ua.Browser()
+        fmt.Printf("%v\n", name)          // => Googlebot
+        fmt.Printf("%v\n", version)       // => 2.1
     }
 }
 

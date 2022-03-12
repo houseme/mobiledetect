@@ -1,14 +1,14 @@
-# Go-MobileDetect
+# Go MobileDetect
 
 ### Library for detecting mobile devices and tablets
 ### Go Mobile Detect is a lightweight Go package imported from PHP for detecting mobile devices (including tablets).
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/houseme/go-mobile-detect.svg)](https://pkg.go.dev/github.com/houseme/go-mobile-detect)
-[![Go](https://github.com/houseme/go-mobile-detect/actions/workflows/go.yml/badge.svg)](https://github.com/housemecn/go-mobile-detect/actions/workflows/go.yml)
-![GitHub](https://img.shields.io/github/license/houseme/go-mobile-detect?style=plastic)
-![GitHub go.mod Go version (branch)](https://img.shields.io/github/go-mod/go-version/houseme/go-mobile-detect/main?style=flat-square)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/houseme/go-mobile-detect?style=flat-square)
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/houseme/go-mobile-detect?style=flat-square)
+[![Go Reference](https://pkg.go.dev/badge/github.com/houseme/mobiledetect.svg)](https://pkg.go.dev/github.com/houseme/mobiledetect)
+[![Go](https://github.com/houseme/mobiledetect/actions/workflows/go.yml/badge.svg)](https://github.com/housemecn/mobiledetect/actions/workflows/go.yml)
+![GitHub](https://img.shields.io/github/license/houseme/mobiledetect?style=plastic)
+![GitHub go.mod Go version (branch)](https://img.shields.io/github/go-mod/go-version/houseme/mobiledetect/main?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/houseme/mobiledetect?style=flat-square)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/houseme/mobiledetect?style=flat-square)
 
 ### What is it?
 

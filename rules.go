@@ -210,9 +210,9 @@ var (
 		// Pixel:
 		`; \bPixel\b`,
 		// HTC:
-		`HTC|HTC.*(Sensation|Evo|Vision|Explorer|6800|8100|8900|A7272|S510e|C110e|Legend|Desire|T8282)|APX515CKT|Qtek9090|APA9292KT|HD_mini|Sensation.*Z710e|PG86100|Z715e|Desire.*(A8181|HD)|ADR6200|ADR6400L|ADR6425|001HT|Inspire 4G|Android.*\bEVO\b|T-Mobile G1|Z520m|Android [0-9.]+; Pixel`,
+		`HTC|HTC.*(Sensation|Evo|Vision|Explorer|6800|8100|8900|A7272|S510e|C110e|Legend|Desire|T8282)|APX515CKT|Qtek9090|APA9292KT|HD_mini|Sensation.*Z710e|PG86100|Z715e|Desire.*(A8181|HD)|ADR6200|ADR6400L|ADR6425|001HT|Inspire 4G|Android.*\bEVO\b|T-mobile G1|Z520m|Android [0-9.]+; Pixel`,
 		// NEXUS:
-		`Nexus One|Nexus S|Galaxy.*Nexus|Android.*Nexus.*Mobile|Nexus 4|Nexus 5|Nexus 6`,
+		`Nexus One|Nexus S|Galaxy.*Nexus|Android.*Nexus.*mobile|Nexus 4|Nexus 5|Nexus 6`,
 		// @todo: Is `Dell Streak` a tablet or a phone? ;)
 		// DELL:
 		`Dell[;]? (Streak|Aero|Venue|Venue Pro|Flash|Smoke|Mini 3iX)|XCD28|XCD35|\b001DL\b|\b101DL\b|\bGS01\b`,
@@ -225,7 +225,7 @@ var (
 		// SONY:
 		`SonyST|SonyLT|SonyEricsson|SonyEricssonLT15iv|LT18i|E10i|LT28h|LT26w|SonyEricssonMT27i|C5303|C6902|C6903|C6906|C6943|D2533|SOV34|601SO|F8332`,
 		// ASUS:
-		`Asus.*Galaxy|PadFone.*Mobile`,
+		`Asus.*Galaxy|PadFone.*mobile`,
 		// Xiaomi:
 		`^*xiaomi.*$|POCOPHONE F1|MI 8|Redmi Note 9S|Redmi Note 5A Prime|N2G47H|M2001J2G|M2001J2I|M1805E10A|M2004J11G
 |M1902F1G|M2002J9G|M2004J19G|M2003J6A1G｜mi|m1|m2|m3|m4|hm`,
@@ -275,30 +275,30 @@ var (
 	}
 	tabletDevices = [...]string{
 		// IPAD:
-		`iPad|iPad.*Mobile`, // @todo: check for mobile friendly emails topic.
-		// NEXUSTABLET: `Android.*Nexus[\s]+(7|10)|^.*Android.*Nexus(?:(?!Mobile).)*$`,
+		`iPad|iPad.*mobile`, // @todo: check for mobile friendly emails topic.
+		// NEXUSTABLET: `Android.*Nexus[\s]+(7|10)|^.*Android.*Nexus(?:(?!mobile).)*$`,
 		`Android.*Nexus[\s]+(7|9|10)`,
 		// GoogleTablet: https://en.wikipedia.org/wiki/Pixel_C
 		`Android.*Pixel C`,
 		// SAMSUNGTABLET: SCH-P709|SCH-P729|SM-T2558 - Samsung Mega - treat them like a regular phone.
-		`SAMSUNG.*Tablet|Galaxy.*Tab|SC-01C|GT-P1000|GT-P1003|GT-P1010|GT-P3105|GT-P6210|GT-P6800|GT-P6810|GT-P7100|GT-P7300|GT-P7310|GT-P7500|GT-P7510|SCH-I800|SCH-I815|SCH-I905|SGH-I957|SGH-I987|SGH-T849|SGH-T859|SGH-T869|SPH-P100|GT-P3100|GT-P3108|GT-P3110|GT-P5100|GT-P5110|GT-P6200|GT-P7320|GT-P7511|GT-N8000|GT-P8510|SGH-I497|SPH-P500|SGH-T779|SCH-I705|SCH-I915|GT-N8013|GT-P3113|GT-P5113|GT-P8110|GT-N8010|GT-N8005|GT-N8020|GT-P1013|GT-P6201|GT-P7501|GT-N5100|GT-N5105|GT-N5110|SHV-E140K|SHV-E140L|SHV-E140S|SHV-E150S|SHV-E230K|SHV-E230L|SHV-E230S|SHW-M180K|SHW-M180L|SHW-M180S|SHW-M180W|SHW-M300W|SHW-M305W|SHW-M380K|SHW-M380S|SHW-M380W|SHW-M430W|SHW-M480K|SHW-M480S|SHW-M480W|SHW-M485W|SHW-M486W|SHW-M500W|GT-I9228|SCH-P739|SCH-I925|GT-I9200|GT-P5200|GT-P5210|GT-P5210X|SM-T311|SM-T310|SM-T310X|SM-T210|SM-T210R|SM-T211|SM-P600|SM-P601|SM-P605|SM-P900|SM-P901|SM-T217|SM-T217A|SM-T217S|SM-P6000|SM-T3100|SGH-I467|XE500|SM-T110|GT-P5220|GT-I9200X|GT-N5110X|GT-N5120|SM-P905|SM-T111|SM-T2105|SM-T315|SM-T320|SM-T320X|SM-T321|SM-T520|SM-T525|SM-T530NU|SM-T230NU|SM-T330NU|SM-T900|XE500T1C|SM-P605V|SM-P905V|SM-T337V|SM-T537V|SM-T707V|SM-T807V|SM-P600X|SM-P900X|SM-T210X|SM-T230|SM-T230X|SM-T325|GT-P7503|SM-T531|SM-T330|SM-T530|SM-T705|SM-T705C|SM-T535|SM-T331|SM-T800|SM-T700|SM-T537|SM-T807|SM-P907A|SM-T337A|SM-T537A|SM-T707A|SM-T807A|SM-T237|SM-T807P|SM-P607T|SM-T217T|SM-T337T|SM-T807T|SM-T116NQ|SM-P550|SM-T350|SM-T550|SM-T9000|SM-P9000|SM-T705Y|SM-T805|GT-P3113|SM-T710|SM-T810|SM-T360|SM-T533|SM-T113|SM-T335|SM-T715`,
+		`SAMSUNG.*tablet|Galaxy.*Tab|SC-01C|GT-P1000|GT-P1003|GT-P1010|GT-P3105|GT-P6210|GT-P6800|GT-P6810|GT-P7100|GT-P7300|GT-P7310|GT-P7500|GT-P7510|SCH-I800|SCH-I815|SCH-I905|SGH-I957|SGH-I987|SGH-T849|SGH-T859|SGH-T869|SPH-P100|GT-P3100|GT-P3108|GT-P3110|GT-P5100|GT-P5110|GT-P6200|GT-P7320|GT-P7511|GT-N8000|GT-P8510|SGH-I497|SPH-P500|SGH-T779|SCH-I705|SCH-I915|GT-N8013|GT-P3113|GT-P5113|GT-P8110|GT-N8010|GT-N8005|GT-N8020|GT-P1013|GT-P6201|GT-P7501|GT-N5100|GT-N5105|GT-N5110|SHV-E140K|SHV-E140L|SHV-E140S|SHV-E150S|SHV-E230K|SHV-E230L|SHV-E230S|SHW-M180K|SHW-M180L|SHW-M180S|SHW-M180W|SHW-M300W|SHW-M305W|SHW-M380K|SHW-M380S|SHW-M380W|SHW-M430W|SHW-M480K|SHW-M480S|SHW-M480W|SHW-M485W|SHW-M486W|SHW-M500W|GT-I9228|SCH-P739|SCH-I925|GT-I9200|GT-P5200|GT-P5210|GT-P5210X|SM-T311|SM-T310|SM-T310X|SM-T210|SM-T210R|SM-T211|SM-P600|SM-P601|SM-P605|SM-P900|SM-P901|SM-T217|SM-T217A|SM-T217S|SM-P6000|SM-T3100|SGH-I467|XE500|SM-T110|GT-P5220|GT-I9200X|GT-N5110X|GT-N5120|SM-P905|SM-T111|SM-T2105|SM-T315|SM-T320|SM-T320X|SM-T321|SM-T520|SM-T525|SM-T530NU|SM-T230NU|SM-T330NU|SM-T900|XE500T1C|SM-P605V|SM-P905V|SM-T337V|SM-T537V|SM-T707V|SM-T807V|SM-P600X|SM-P900X|SM-T210X|SM-T230|SM-T230X|SM-T325|GT-P7503|SM-T531|SM-T330|SM-T530|SM-T705|SM-T705C|SM-T535|SM-T331|SM-T800|SM-T700|SM-T537|SM-T807|SM-P907A|SM-T337A|SM-T537A|SM-T707A|SM-T807A|SM-T237|SM-T807P|SM-P607T|SM-T217T|SM-T337T|SM-T807T|SM-T116NQ|SM-P550|SM-T350|SM-T550|SM-T9000|SM-P9000|SM-T705Y|SM-T805|GT-P3113|SM-T710|SM-T810|SM-T360|SM-T533|SM-T113|SM-T335|SM-T715`,
 		// @reference: http://www.labnol.org/software/kindle-user-agent-string/20378/
 		// KINDLE:
 		`Kindle|Silk.*Accelerated|Android.*\b(KFOT|KFTT|KFJWI|KFJWA|KFOTE|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|WFJWAE|KFSAWA|KFSAWI|KFASWI|KFARWI|KFFOWI|KFGIWI|KFMEWI)\b`,
 		// Only the Surface tablets with Windows RT are considered mobile.
 		// @ref: http://msdn.microsoft.com/en-us/library/ie/hh920767(v=vs.85).aspx
 		// SURFACETABLET:
-		`Windows NT [0-9.]+; ARM;.*(Tablet|ARMBJS)`,
+		`Windows NT [0-9.]+; ARM;.*(tablet|ARMBJS)`,
 		// @ref: http://shopping1.hp.com/is-bin/INTERSHOP.enfinity/WFS/WW-USSMBPublicStore-Site/en_US/-/USD/ViewStandardCatalog-Browse?CatalogCategoryID=JfIQ7EN5lqMAAAEyDcJUDwMT
 		// HPTABLET:
 		`HP Slate (7|8|10)|HP ElitePad 900|hp-tablet|EliteBook.*Touch|HP 8|Slate 21|HP SlateBook 10`,
 		// @note: watch out for PadFone, see #132
-		// AsusTablet:       `^.*PadFone((?!Mobile).)*$|Transformer|TF101|TF101G|TF300T|TF300TG|TF300TL|TF700T|TF700KL|TF701T|TF810C|ME171|ME301T|ME302C|ME371MG|ME370T|ME372MG|ME172V|ME173X|ME400C|Slider SL101|\bK00F\b|TX201LA`,
+		// AsusTablet:       `^.*PadFone((?!mobile).)*$|Transformer|TF101|TF101G|TF300T|TF300TG|TF300TL|TF700T|TF700KL|TF701T|TF810C|ME171|ME301T|ME302C|ME371MG|ME370T|ME372MG|ME172V|ME173X|ME400C|Slider SL101|\bK00F\b|TX201LA`,
 		// @ref http://www.asus.com/de/Tablets_Mobile/Memo_Pad_Products/
 		// ASUSTABLET:
 		`^.*PadFone.*$|Transformer|TF101|TF101G|TF300T|TF300TG|TF300TL|TF700T|TF700KL|TF701T|TF810C|ME171|ME301T|ME302C|ME371MG|ME370T|ME372MG|ME172V|ME173X|ME400C|Slider SL101|\bK00F\b|\bK00C\b|\bK00E\b|\bK00L\b|TX201LA|ME176C|ME102A|\bM80TA\b|ME372CL|ME560CG|ME372CG|ME302KL| K010 | K011 | K017 | K01E |ME572C|ME103K|ME170C|ME171C|\bME70C\b|ME581C|ME581CL|ME8510C|ME181C|P01Y|PO1MA|P01Z|\bP027\b|\bP024\b|\bP00C\b`,
 		// BLACKBERRYTABLET:
-		`PlayBook|RIM Tablet`,
+		`PlayBook|RIM tablet`,
 		// HTCTABLET:
 		`HTC_Flyer_P512|HTC Flyer|HTC Jetstream|HTC-P715a|HTC EVO View 4G|PG41200|PG09410`,
 		// MOTOROLATABLET:
@@ -328,7 +328,7 @@ var (
 		`PMP3170B|PMP3270B|PMP3470B|PMP7170B|PMP3370B|PMP3570C|PMP5870C|PMP3670B|PMP5570C|PMP5770D|PMP3970B|PMP3870C|PMP5580C|PMP5880D|PMP5780D|PMP5588C|PMP7280C|PMP7280C3G|PMP7280|PMP7880D|PMP5597D|PMP5597|PMP7100D|PER3464|PER3274|PER3574|PER3884|PER5274|PER5474|PMP5097CPRO|PMP5097|PMP7380D|PMP5297C|PMP5297C_QUAD|PMP812E|PMP812E3G|PMP812F|PMP810E|PMP880TD|PMT3017|PMT3037|PMT3047|PMT3057|PMT7008|PMT5887|PMT5001|PMT5002`,
 		// @ref: http://support.lenovo.com/en_GB/downloads/default.page?#
 		// LENOVOTABLET:
-		`Lenovo TAB|Idea(Tab|Pad)( A1|A10| K1|)|ThinkPad([ ]+)?Tablet|YT3-850M|YT3-X90L|YT3-X90F|YT3-X90X|Lenovo.*(S2109|S2110|S5000|S6000|K3011|A3000|A3500|A1000|A2107|A2109|A1107|A5500|A7600|B6000|B8000|B8080)(-|)(FL|F|HV|H|)|TB-X103F|TB-X304X|TB-X304F|TB-X304L|TB-X505F|TB-X505L|TB-X505X|TB-X605F|TB-X605L|TB-8703F|TB-8703X|TB-8703N|TB-8704N|TB-8704F|TB-8704X|TB-8704V|TB-7304F|TB-7304I|TB-7304X|Tab2A7-10F|Tab2A7-20F|TB2-X30L|YT3-X50L|YT3-X50F|YT3-X50M|YT-X705F|YT-X703F|YT-X703L|YT-X705L|YT-X705X|TB2-X30F|TB2-X30L|TB2-X30M|A2107A-F|A2107A-H|TB3-730F|TB3-730M|TB3-730X|TB-7504F|TB-7504X|TB-X704F|TB-X104F|TB3-X70F|TB-X705F|TB-8504F|TB3-X70L|TB3-710F|TB-X704L`,
+		`Lenovo TAB|Idea(Tab|Pad)( A1|A10| K1|)|ThinkPad([ ]+)?tablet|YT3-850M|YT3-X90L|YT3-X90F|YT3-X90X|Lenovo.*(S2109|S2110|S5000|S6000|K3011|A3000|A3500|A1000|A2107|A2109|A1107|A5500|A7600|B6000|B8000|B8080)(-|)(FL|F|HV|H|)|TB-X103F|TB-X304X|TB-X304F|TB-X304L|TB-X505F|TB-X505L|TB-X505X|TB-X605F|TB-X605L|TB-8703F|TB-8703X|TB-8703N|TB-8704N|TB-8704F|TB-8704X|TB-8704V|TB-7304F|TB-7304I|TB-7304X|Tab2A7-10F|Tab2A7-20F|TB2-X30L|YT3-X50L|YT3-X50F|YT3-X50M|YT-X705F|YT-X703F|YT-X703L|YT-X705L|YT-X705X|TB2-X30F|TB2-X30L|TB2-X30M|A2107A-F|A2107A-H|TB3-730F|TB3-730M|TB3-730X|TB-7504F|TB-7504X|TB-X704F|TB-X104F|TB3-X70F|TB-X705F|TB-8504F|TB3-X70L|TB3-710F|TB-X704L`,
 		// DELLTABLET:
 		`Venue 11|Venue 8|Venue 7|Dell Streak 10|Dell Streak 7`,
 		// @ref: http://www.yarvik.com/en/matrix/tablets/
@@ -365,7 +365,7 @@ var (
 		// @ref: Readers http://www.atsuhiro-me.net/ebook/sony-reader/sony-reader-web-browser
 		// @ref: http://www.sony.jp/support/tablet/
 		// SONYTABLET:
-		`Sony.*Tablet|Xperia Tablet|Sony Tablet S|SO-03E|SGPT12|SGPT13|SGPT114|SGPT121|SGPT122|SGPT123|SGPT111|SGPT112|SGPT113|SGPT131|SGPT132|SGPT133|SGPT211|SGPT212|SGPT213|SGP311|SGP312|SGP321|EBRD1101|EBRD1102|EBRD1201|SGP351|SGP341|SGP511|SGP512|SGP521|SGP541|SGP551|SGP621|SGP641|SGP612|SOT31|SGP771|SGP611|SGP612|SGP712`,
+		`Sony.*tablet|Xperia tablet|Sony tablet S|SO-03E|SGPT12|SGPT13|SGPT114|SGPT121|SGPT122|SGPT123|SGPT111|SGPT112|SGPT113|SGPT131|SGPT132|SGPT133|SGPT211|SGPT212|SGPT213|SGP311|SGP312|SGP321|EBRD1101|EBRD1102|EBRD1201|SGP351|SGP341|SGP511|SGP512|SGP521|SGP541|SGP551|SGP621|SGP641|SGP612|SOT31|SGP771|SGP611|SGP612|SGP712`,
 		// PHILIPSTABLET:
 		// @ref: http://www.support.philips.com/support/catalog/worldproducts.jsp?userLanguage=en&userCountry=cn&categoryid=3G_LTE_TABLET_SU_CN_CARE&title=3G%20tablets%20/%20LTE%20range&_dyncharset=UTF-8
 		`\b(PI2010|PI3000|PI3100|PI3105|PI3110|PI3205|PI3210|PI3900|PI4010|PI7000|PI7100)\b`,
@@ -481,7 +481,7 @@ var (
 		`OV-(SteelCore|NewBase|Basecore|Baseone|Exellen|Quattor|EduTab|Solution|ACTION|BasicTab|TeddyTab|MagicTab|Stream|TB-08|TB-09)|Qualcore 1027`,
 		// @ref: http://hclmetablet.com/India/index.php
 		// HCLTABLET:
-		`HCL.*Tablet|Connect-3G-2.0|Connect-2G-2.0|ME Tablet U1|ME Tablet U2|ME Tablet G1|ME Tablet X1|ME Tablet Y2|ME Tablet Sync`,
+		`HCL.*tablet|Connect-3G-2.0|Connect-2G-2.0|ME tablet U1|ME tablet U2|ME tablet G1|ME tablet X1|ME tablet Y2|ME tablet Sync`,
 		// @ref: http://www.edigital.hu/es_e-book_olvaso/Tablet-c18385.html
 		// DPSTABLET:
 		`DPS Dream 9|DPS Dual 7`,
@@ -540,7 +540,7 @@ var (
 		// JXDTABLET:
 		`Android.*\b(F3000|A3300|JXD5000|JXD3000|JXD2000|JXD300B|JXD300|S5800|S7800|S602b|S5110b|S7300|S5300|S602|S603|S5100|S5110|S601|S7100a|P3000F|P3000s|P101|P200s|P1000m|P200m|P9100|P1000s|S6600b|S908|P1000|P300|S18|S6600|S9100)\b`,
 		// IJOYTABLET:
-		`Tablet (Spirit 7|Essentia|Galatea|Fusion|Onix 7|Landa|Titan|Scooby|Deox|Stella|Themis|Argon|Unique 7|Sygnus|Hexen|Finity 7|Cream|Cream X2|Jade|Neon 7|Neron 7|Kandy|Scape|Saphyr 7|Rebel|Biox|Rebel|Rebel 8GB|Myst|Draco 7|Myst|Tab7-004|Myst|Tadeo Jones|Tablet Boing|Arrow|Draco Dual Cam|Aurix|Mint|Amity|Revolution|Finity 9|Neon 9|T9w|Amity 4GB Dual Cam|Stone 4GB|Stone 8GB|Andromeda|Silken|X2|Andromeda II|Halley|Flame|Saphyr 9,7|Touch 8|Planet|Triton|Unique 10|Hexen 10|Memphis 4GB|Memphis 8GB|Onix 10)`,
+		`tablet (Spirit 7|Essentia|Galatea|Fusion|Onix 7|Landa|Titan|Scooby|Deox|Stella|Themis|Argon|Unique 7|Sygnus|Hexen|Finity 7|Cream|Cream X2|Jade|Neon 7|Neron 7|Kandy|Scape|Saphyr 7|Rebel|Biox|Rebel|Rebel 8GB|Myst|Draco 7|Myst|Tab7-004|Myst|Tadeo Jones|tablet Boing|Arrow|Draco Dual Cam|Aurix|Mint|Amity|Revolution|Finity 9|Neon 9|T9w|Amity 4GB Dual Cam|Stone 4GB|Stone 8GB|Andromeda|Silken|X2|Andromeda II|Halley|Flame|Saphyr 9,7|Touch 8|Planet|Triton|Unique 10|Hexen 10|Memphis 4GB|Memphis 8GB|Onix 10)`,
 		// @ref http://www.intracon.eu/tablet
 		// FX2TABLET:
 		`FX2 PAD7|FX2 PAD10`,
@@ -620,8 +620,8 @@ var (
 		// TELSTRATABLET:
 		`T-Hub2`,
 		// GenericTablet
-		// @full, notice Tablet(?!.*PC) - `Android.*\b97D\b|Tablet(?!.*PC)|BNTV250A|MID-WCDMA|LogicPD Zoom2|\bA7EB\b|CatNova8|A1_07|CT704|CT1002|\bM721\b|rk30sdk|\bEVOTAB\b|M758A|ET904|ALUMIUM10|Smartfren Tab|Endeavour 1010|Tablet-PC-4|Tagi Tab|\bM6pro\b|CT1020W|arc 10HD|\bJolla\b|\bTP750\b
-		`Android.*\b97D\b|BNTV250A|MID-WCDMA|LogicPD Zoom2|\bA7EB\b|CatNova8|A1_07|CT704|CT1002|\bM721\b|rk30sdk|\bEVOTAB\b|M758A|ET904|ALUMIUM10|Smartfren Tab|Endeavour 1010|Tablet-PC-4|Tagi Tab|\bM6pro\b|CT1020W|arc 10HD|\bTP750\b|\bQTAQZ3\b|WVT101|TM1088|KT107`,
+		// @full, notice tablet(?!.*PC) - `Android.*\b97D\b|tablet(?!.*PC)|BNTV250A|MID-WCDMA|LogicPD Zoom2|\bA7EB\b|CatNova8|A1_07|CT704|CT1002|\bM721\b|rk30sdk|\bEVOTAB\b|M758A|ET904|ALUMIUM10|Smartfren Tab|Endeavour 1010|tablet-PC-4|Tagi Tab|\bM6pro\b|CT1020W|arc 10HD|\bJolla\b|\bTP750\b
+		`Android.*\b97D\b|BNTV250A|MID-WCDMA|LogicPD Zoom2|\bA7EB\b|CatNova8|A1_07|CT704|CT1002|\bM721\b|rk30sdk|\bEVOTAB\b|M758A|ET904|ALUMIUM10|Smartfren Tab|Endeavour 1010|tablet-PC-4|Tagi Tab|\bM6pro\b|CT1020W|arc 10HD|\bTP750\b|\bQTAQZ3\b|WVT101|TM1088|KT107`,
 	}
 	operatingSystems = [...]string{
 		// ANDROIDOS:
@@ -634,7 +634,7 @@ var (
 		`Symbian|SymbOS|Series60|Series40|SYB-[0-9]+|\bS60\b`,
 		// @reference: http://en.wikipedia.org/wiki/Windows_Mobile
 		// WINDOWSMOBILEOS:
-		`Windows CE.*(PPC|Smartphone|Mobile|[0-9]{3}x[0-9]{3})|Window Mobile|Windows Phone [0-9.]+|WCE;`,
+		`Windows CE.*(PPC|Smartphone|mobile|[0-9]{3}x[0-9]{3})|Window mobile|Windows Phone [0-9.]+|WCE;`,
 		// @reference: http://en.wikipedia.org/wiki/Windows_Phone
 		// http://wifeng.cn/?r=blog&a=view&id=106
 		// http://nicksnettravels.builttoroam.com/post/2011/01/10/Bogus-Windows-Phone-7-User-Agent-String.aspx
@@ -642,7 +642,7 @@ var (
 		// @ref http://msdn.microsoft.com/library/ms537503.aspx
 		`Windows Phone 10.0|Windows Phone 8.1|Windows Phone 8.0|Windows Phone OS|XBLWP7|ZuneWP7|Windows NT 6.[23]; ARM;`,
 		// IOS:
-		`\biPhone.*Mobile|\biPod|\biPad|AppleCoreMedia`,
+		`\biPhone.*mobile|\biPod|\biPad|AppleCoreMedia`,
 		// https://en.wikipedia.org/wiki/IPadOS
 		// 'iPadOS'
 		`CPU OS 13`,
@@ -669,19 +669,19 @@ var (
 	browsers = [...]string{
 		// @reference: https://developers.google.com/chrome/mobile/docs/user-agent
 		// CHROME:
-		`\bCrMo\b|CriOS|Android.*Chrome/[.0-9]* (Mobile)?`,
+		`\bCrMo\b|CriOS|Android.*Chrome/[.0-9]* (mobile)?`,
 		// DOLFIN:
 		`\bDolfin\b`,
 		// OPERA:
-		`Opera.*Mini|Opera.*Mobi|Android.*Opera|Mobile.*OPR/[0-9.]+|Coast/[0-9.]+`,
+		`Opera.*Mini|Opera.*Mobi|Android.*Opera|mobile.*OPR/[0-9.]+|Coast/[0-9.]+`,
 		// SKYFIRE:
 		`Skyfire`,
 		// EDGE:
-		`Mobile Safari/[.0-9]* Edge`,
+		`mobile Safari/[.0-9]* Edge`,
 		// IE:
 		`IEMobile|MSIEMobile`, // |Trident/[.0-9]+
 		// FIREFOX:
-		`fennec|firefox.*maemo|(Mobile|Tablet).*Firefox|Firefox.*Mobile|FxiOS`,
+		`fennec|firefox.*maemo|(mobile|tablet).*Firefox|Firefox.*mobile|FxiOS`,
 		// BOLT:
 		`bolt`,
 		// TEASHARK:
@@ -690,7 +690,7 @@ var (
 		`Blazer`,
 		// @reference: http://developer.apple.com/library/safari/#documentation/AppleApplications/Reference/SafariWebContent/OptimizingforSafarioniPhone/OptimizingforSafarioniPhone.html#//apple_ref/doc/uid/TP40006517-SW3
 		// SAFARI:
-		`Version.*Mobile.*Safari|Safari.*Mobile|MobileSafari`,
+		`Version.*mobile.*Safari|Safari.*mobile|MobileSafari`,
 		// @ref: http://en.wikipedia.org/wiki/Midori_(web_browser)
 		// `Midori`          : `midori`,
 		// TIZEN:
@@ -724,17 +724,17 @@ var (
 		`NokiaBrowser|OviBrowser|OneBrowser|TwonkyBeamBrowser|SEMC.*Browser|FlyFlow|Minimo|NetFront|Novarra-Vision|MQQBrowser|MicroMessenger`,
 		// @reference: https://en.wikipedia.org/wiki/Pale_Moon_(web_browser)
 		// PaleMoon:
-		`Android.*PaleMoon|Mobile.*PaleMoon`,
+		`Android.*PaleMoon|mobile.*PaleMoon`,
 	}
 	utilities = [...]string{
-		// Experimental. When a mobile device wants to switch to 'Desktop Mode'.
+		// Experimental. When a mobile device wants to switch to 'desktop Mode'.
 		// http://scottcate.com/technology/windows-phone-8-ie10-desktop-or-mobile/
 		// https://github.com/serbanghita/Mobile-Detect/issues/57#issuecomment-15024011
 		// https://developers.facebook.com/docs/sharing/webmasters/crawler/
-		// Bot
+		// bot
 		`Googlebot|facebookexternalhit|Google-AMPHTML|s~amp-validator|AdsBot-Google|Google Keyword Suggestion|Facebot|YandexBot|YandexMobileBot|bingbot|ia_archiver|AhrefsBot|Ezooms|GSLFbot|WBSearchBot|Twitterbot|TweetmemeBot|Twikle|PaperLiBot|Wotbox|UnwindFetchor|Exabot|MJ12bot|YandexImages|TurnitinBot|Pingdom|contentkingapp|AspiegelBot`,
 		// MobileBot
-		`Googlebot-Mobile|AdsBot-Google-Mobile|YahooSeeker/M1A1-R2D2`,
+		`Googlebot-mobile|AdsBot-Google-mobile|YahooSeeker/M1A1-R2D2`,
 		// DesktopMode
 		`WPDesktop`,
 		// TV
