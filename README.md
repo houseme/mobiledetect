@@ -1,6 +1,8 @@
 Go-MobileDetect
 ==============
 
+Go Mobile Detect is a lightweight Go package imported from PHP for detecting mobile devices (including tablets).
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/houseme/go-mobile-detect.svg)](https://pkg.go.dev/github.com/houseme/go-mobile-detect)
 [![Go](https://github.com/houseme/go-mobile-detect/actions/workflows/go.yml/badge.svg)](https://github.com/housemecn/go-mobile-detect/actions/workflows/go.yml)
 ![GitHub](https://img.shields.io/github/license/houseme/go-mobile-detect?style=plastic)
@@ -9,8 +11,6 @@ Go-MobileDetect
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/houseme/go-mobile-detect?style=flat-square)
 
 ### Description
-
-Go-MobileDetect is a lightweight package imported from PHP for detecting mobile devices including tablets. 
 
 The package is imported from [MobileDetect](http://mobiledetect.net/) which was originally written in PHP.
 
