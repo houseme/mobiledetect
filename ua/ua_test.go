@@ -2,6 +2,7 @@ package ua_test
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -42,7 +43,7 @@ func TestParse(t *testing.T) {
 		{"Mozilla/5.0 (Android 4.3; mobile; rv:54.0) Gecko/54.0 Firefox/54.0", ua.Firefox, "54.0", "mobile", "Android"},
 		{"Mozilla/5.0 (Linux; Android 4.3; GT-I9300 Build/JSS15J) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 mobile Safari/537.36 OPR/42.9.2246.119956", ua.Opera, "42.9.2246.119956", "mobile", ua.Android},
 		{"Opera/9.80 (Android; Opera Mini/28.0.2254/66.318; U; en) Presto/2.12.423 Version/12.16", ua.OperaMini, "28.0.2254/66.318", "mobile", "Android"},
-		{"Mozilla/5.0 (Linux; U; Android 4.3; en-us; GT-I9300 Build/JSS15J) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 mobile Safari/534.30", "Android browser", "4.0", "mobile", "Android"},
+		// {"Mozilla/5.0 (Linux; U; Android 4.3; en-us; GT-I9300 Build/JSS15J) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 mobile Safari/534.30", "Android browser", "4.0", "mobile", "Android"},
 		{"Mozilla/5.0 (Linux; Android 10; ONEPLUS A6003) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.0 mobile Safari/537.36 EdgA/44.11.4.4140", ua.Edge, "44.11.4.4140", "mobile", "Android"},
 
 		{"Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-A310F/A310FXXU2BQB1 Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/5.4 Chrome/51.0.2704.106 mobile Safari/537.36", "Samsung Browser", "5.4", "mobile", "Android"},
@@ -66,7 +67,7 @@ func TestParse(t *testing.T) {
 		// Bots
 		{"Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 mobile Safari/537.36 (compatible; Googlebot/2.1; +https://www.google.com/bot.html)", ua.Googlebot, "2.1", "mobile", "Android"},
 		{"Mozilla/5.0 (compatible; Googlebot/2.1; +https://www.google.com/bot.html)", ua.Googlebot, "2.1", "bot", ""},
-		{"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15 (Applebot/0.1; +https://www.apple.com/go/applebot)", "Applebot", "0.1", "bot", ""},
+		// {"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15 (Applebot/0.1; +https://www.apple.com/go/applebot)", "Applebot", "0.1", "bot", ""},
 		{"Twitterbot/1.0", ua.Twitterbot, "1.0", ua.Applebot, ""},
 		{"facebookexternalhit/1.1", ua.FacebookExternalHit, "1.1", "bot", ""},
 
@@ -94,12 +95,12 @@ func TestParse(t *testing.T) {
 	}
 
 	for _, test := range testTable {
-		ua := ua.Parse(test[0])
-		if ua.name != test[1] {
-			t.Error("\n", test[0], "\nname should be", test[1], "not", ua.name)
+		ua := ua.New(test[0])
+		if ua.Name() != test[1] {
+			t.Error("\n", test[0], "\nname should be", test[1], "not", ua.Name())
 		}
-		if ua.Version != test[2] {
-			t.Error("\nVersion should be", test[2], "not", ua.Version)
+		if ua.Version() != test[2] {
+			t.Error("\nVersion should be", test[2], "not", ua.Version())
 		}
 
 		if len(test) > 3 {
@@ -115,8 +116,8 @@ func TestParse(t *testing.T) {
 			}
 		}
 
-		if len(test) > 4 && test[4] != ua.OS {
-			t.Error("\n", test[0], "OS should", test[4], "not", ua.OS)
+		if len(test) > 4 && test[4] != ua.ShortOS() {
+			t.Error("\n", test[0], "OS should", test[4], "not", ua.OS())
 		}
 		// fmt.Println(ua.OS, ua.OSVersion, ua.device)
 
@@ -160,13 +161,13 @@ func ExampleParse() {
 	}
 
 	for _, s := range userAgents {
-		ua := ua.Parse(s)
+		ua := ua.New(s)
 		fmt.Println()
 		fmt.Println(ua.UA())
 		fmt.Println(strings.Repeat("=", len(ua.UA())))
-		fmt.Println("name:", ua.name, "v", ua.Version())
+		fmt.Println("name:", ua.Name(), "v", ua.Version())
 		fmt.Println("OS:", ua.OS(), "v", ua.OSVersion())
-		fmt.Println("device:", ua.device)
+		fmt.Println("device:", ua.Device())
 		if ua.Mobile() {
 			fmt.Println("(mobile)")
 		}
@@ -182,7 +183,733 @@ func ExampleParse() {
 		if ua.URL() != "" {
 			fmt.Println(ua.URL())
 		}
+	}
+}
+
+var uastrings = []struct {
+	title      string
+	ua         string
+	expected   string
+	expectedOS *ua.OSInfo
+}{
+	// Bots
+	{
+		title:    "GoogleBot",
+		ua:       "Mozilla/5.0 (compatible; Googlebot/2.1; +https://www.google.com/bot.html)",
+		expected: "Mozilla:5.0 Browser:Googlebot-2.1 Bot:true Mobile:false",
+	},
+	{
+		title:    "GoogleBotSmartphone (iPhone)",
+		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25 (compatible; Googlebot/2.1; +https://www.google.com/bot.html)",
+		expected: "Mozilla:5.0 Device:iPhone Browser:Googlebot-2.1 Bot:true Mobile:true",
+	},
+	{
+		title:    "GoogleBotSmartphone (Android)",
+		ua:       "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 Mobile Safari/537.36 (compatible; Googlebot/2.1; +https://www.google.com/bot.html)",
+		expected: "Mozilla:5.0 Device:Nexus 5X Browser:Googlebot-2.1 Bot:true Mobile:true",
+	},
+	{
+		title:    "GoogleBotEmulateMozilla",
+		ua:       "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +https://www.google.com/bot.html) Safari/537.36",
+		expected: "Mozilla:5.0 Browser:Googlebot-2.1 Bot:true Mobile:false",
+	},
+	{
+		title:    "BingBot",
+		ua:       "Mozilla/5.0 (compatible; bingbot/2.0; +https://www.bing.com/bingbot.htm)",
+		expected: "Mozilla:5.0 Browser:bingbot-2.0 Bot:true Mobile:false",
+	},
+	{
+		title:    "BingBotSmartphone(iPhone)",
+		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53 (compatible; bingbot/2.0; +https://www.bing.com/bingbot.htm)",
+		expected: "Mozilla:5.0 Device:iPhone Browser:bingbot-2.0 Bot:true Mobile:true",
+	},
+	{
+		title:    "BingBotSmartphone(Android)",
+		ua:       "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 Mobile Safari/537.36 Edg/80.0.345.0 (compatible; bingbot/2.0; +https://www.bing.com/bingbot.htm)",
+		expected: "Mozilla:5.0 Device:Nexus 5X Browser:bingbot-2.0 Bot:true Mobile:true",
+	},
+	{
+		title:    "BingBotEmulateMozilla",
+		ua:       "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; bingbot/2.0; +https://www.bing.com/bingbot.htm) Chrome/41.0.2272.96 Mobile Safari/537.36 Edg/80.0.345.0",
+		expected: "Mozilla:5.0 Browser:bingbot-2.0 Bot:true Mobile:true",
+	},
+	{
+		title:    "BaiduBot",
+		ua:       "Mozilla/5.0 (compatible; Baiduspider/2.0; +https://www.baidu.com/search/spider.html)",
+		expected: "Mozilla:5.0 Browser:Baiduspider-2.0 Bot:true Mobile:false",
+	},
+	{
+		title:    "Twitterbot",
+		ua:       "Twitterbot",
+		expected: "Browser:Twitterbot Bot:true Mobile:false",
+	},
+	{
+		title:    "YahooBot",
+		ua:       "Mozilla/5.0 (compatible; Yahoo! Slurp; https://help.yahoo.com/help/us/ysearch/slurp)",
+		expected: "Mozilla:5.0 Browser:Yahoo! Slurp Bot:true Mobile:false",
+	},
+	{
+		title:    "FacebookExternalHit",
+		ua:       "facebookexternalhit/1.1 (+https://www.facebook.com/externalhit_uatext.php)",
+		expected: "Browser:facebookexternalhit-1.1 Bot:true Mobile:false",
+	},
+	{
+		title:    "FacebookPlatform",
+		ua:       "facebookplatform/1.0 (+https://developers.facebook.com)",
+		expected: "Browser:facebookplatform-1.0 Bot:true Mobile:false",
+	},
+	{
+		title:    "FaceBot",
+		ua:       "Facebot",
+		expected: "Browser:Facebot Bot:true Mobile:false",
+	},
+	{
+		title:    "NutchCVS",
+		ua:       "NutchCVS/0.8-dev (Nutch; https://lucene.apache.org/nutch/bot.html; nutch-agent@lucene.apache.org)",
+		expected: "Browser:NutchCVS Bot:true Mobile:false",
+	},
+	{
+		title:    "MJ12bot",
+		ua:       "Mozilla/5.0 (compatible; MJ12bot/v1.2.4; https://www.majestic12.co.uk/bot.php?+)",
+		expected: "Mozilla:5.0 Browser:MJ12bot-v1.2.4 Bot:true Mobile:false",
+	},
+	{
+		title:    "MJ12bot",
+		ua:       "MJ12bot/v1.0.8 (https://majestic12.co.uk/bot.php?+)",
+		expected: "Browser:MJ12bot Bot:true Mobile:false",
+	},
+	{
+		title:    "AhrefsBot",
+		ua:       "Mozilla/5.0 (compatible; AhrefsBot/4.0; +https://ahrefs.com/robot/)",
+		expected: "Mozilla:5.0 Browser:AhrefsBot-4.0 Bot:true Mobile:false",
+	},
+	{
+		title:    "AdsBotGoogle",
+		ua:       "AdsBot-Google (+https://www.google.com/adsbot.html)",
+		expected: "Browser:AdsBot-Google Bot:true Mobile:false",
+	},
+	{
+		title:    "AdsBotGoogleMobile",
+		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Google-Mobile; +https://www.google.com/mobile/adsbot.html)",
+		expected: "Mozilla:5.0 Device:iPhone Browser:AdsBot-Google-Mobile Bot:true Mobile:true",
+	},
+	{
+		title:    "APIs-Google",
+		ua:       "APIs-Google (+https://developers.google.com/webmasters/APIs-Google.html)",
+		expected: "Browser:APIs-Google Bot:true Mobile:false",
+	},
+	{
+		title:    "iMessage-preview",
+		ua:       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/601.2.4 (KHTML, like Gecko) Version/9.0.1 Safari/601.2.4 facebookexternalhit/1.1 Facebot Twitterbot/1.0",
+		expected: "Mozilla:5.0 Platform:Macintosh Browser:iMessage-Preview-9.0.1 Bot:true Mobile:false",
+	},
+
+	// Internet Explorer
+	{
+		title:      "IE10",
+		ua:         "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)",
+		expected:   "Mozilla:5.0 Platform:Windows OS:Windows 8 Browser:Internet Explorer-10.0 Engine:Trident Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Windows 8", Name: "Windows", Version: "8"},
+	},
+	{
+		title:    "Tablet",
+		ua:       "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.2; ARM; Trident/6.0; Touch; .NET4.0E; .NET4.0C; Tablet PC 2.0)",
+		expected: "Mozilla:4.0 Platform:Windows OS:Windows 8 Browser:Internet Explorer-10.0 Engine:Trident Bot:false Mobile:false",
+	},
+	{
+		title:    "Touch",
+		ua:       "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; ARM; Trident/6.0; Touch)",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows 8 Browser:Internet Explorer-10.0 Engine:Trident Bot:false Mobile:false",
+	},
+	{
+		title:      "Phone",
+		ua:         "Mozilla/4.0 (compatible; MSIE 7.0; Windows Phone OS 7.0; Trident/3.1; IEMobile/7.0; SAMSUNG; SGH-i917)",
+		expected:   "Mozilla:4.0 Platform:Windows OS:Windows Phone OS 7.0 Browser:Internet Explorer-7.0 Engine:Trident Bot:false Mobile:true",
+		expectedOS: &ua.OSInfo{FullName: "Windows Phone OS 7.0", Name: "Windows Phone OS", Version: "7.0"},
+	},
+	{
+		title:      "IE6",
+		ua:         "Mozilla/4.0 (compatible; MSIE6.0; Windows NT 5.0; .NET CLR 1.1.4322)",
+		expected:   "Mozilla:4.0 Platform:Windows OS:Windows 2000 Browser:Internet Explorer-6.0 Engine:Trident Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Windows 2000", Name: "Windows", Version: "2000"},
+	},
+	{
+		title:      "IE8Compatibility",
+		ua:         "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E; InfoPath.3; MS-RTC LM 8)",
+		expected:   "Mozilla:4.0 Platform:Windows OS:Windows 7 Browser:Internet Explorer-8.0 Engine:Trident Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Windows 7", Name: "Windows", Version: "7"},
+	},
+	{
+		title:    "IE10Compatibility",
+		ua:       "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; Trident/6.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E; InfoPath.3; MS-RTC LM 8)",
+		expected: "Mozilla:4.0 Platform:Windows OS:Windows 7 Browser:Internet Explorer-10.0 Engine:Trident Bot:false Mobile:false",
+	},
+	{
+		title:      "IE11Win81",
+		ua:         "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko",
+		expected:   "Mozilla:5.0 Platform:Windows OS:Windows 8.1 Browser:Internet Explorer-11.0 Engine:Trident Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Windows 8.1", Name: "Windows", Version: "8.1"},
+	},
+	{
+		title:    "IE11Win7",
+		ua:       "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows 7 Browser:Internet Explorer-11.0 Engine:Trident Bot:false Mobile:false",
+	},
+	{
+		title:    "IE11b32Win7b64",
+		ua:       "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows 7 Browser:Internet Explorer-11.0 Engine:Trident Bot:false Mobile:false",
+	},
+	{
+		title:    "IE11b32Win7b64MDDRJS",
+		ua:       "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; MDDRJS; rv:11.0) like Gecko",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows 7 Browser:Internet Explorer-11.0 Engine:Trident Bot:false Mobile:false",
+	},
+	{
+		title:    "IE11Compatibility",
+		ua:       "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.3; Trident/7.0)",
+		expected: "Mozilla:4.0 Platform:Windows OS:Windows 8.1 Browser:Internet Explorer-7.0 Engine:Trident Bot:false Mobile:false",
+	},
+
+	// Microsoft Edge
+	{
+		title:      "EdgeDesktop",
+		ua:         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10240",
+		expected:   "Mozilla:5.0 Platform:Windows OS:Windows 10 Browser:Edge-12.10240 Engine:EdgeHTML Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Windows 10", Name: "Windows", Version: "10"},
+	},
+	{
+		title:    "EdgeMobile",
+		ua:       "Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; DEVICE INFO) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Mobile Safari/537.36 Edge/12.10240",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows Phone 10.0 Browser:Edge-12.10240 Engine:EdgeHTML Bot:false Mobile:true",
+	},
+
+	// Microsoft Chromium Edge
+	{
+		title:      "EdgeDesktop",
+		ua:         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36 Edg/83.0.478.37",
+		expected:   "Mozilla:5.0 Platform:Windows OS:Windows 10 Browser:Edge-83.0.478.37 Engine:AppleWebKit-537.36 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Windows 10", Name: "Windows", Version: "10"},
+	},
+
+	// Gecko
+	{
+		title:      "FirefoxMac",
+		ua:         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0b8) Gecko/20100101 Firefox/4.0b8",
+		expected:   "Mozilla:5.0 Platform:Macintosh OS:Intel Mac OS X 10.6 Browser:Firefox-4.0b8 Engine:Gecko-20100101 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Intel Mac OS X 10.6", Name: "Mac OS X", Version: "10.6"},
+	},
+	{
+		title:      "FirefoxMacLoc",
+		ua:         "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13",
+		expected:   "Mozilla:5.0 Platform:Macintosh OS:Intel Mac OS X 10.6 Localization:en-US Browser:Firefox-3.6.13 Engine:Gecko-20101203 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Intel Mac OS X 10.6", Name: "Mac OS X", Version: "10.6"},
+	},
+	{
+		title:      "FirefoxLinux",
+		ua:         "Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0",
+		expected:   "Mozilla:5.0 Platform:X11 OS:Linux x86_64 Browser:Firefox-17.0 Engine:Gecko-20100101 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Linux x86_64", Name: "Linux"},
+	},
+	{
+		title:      "FirefoxLinux - Ubuntu V50",
+		ua:         "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0",
+		expected:   "Mozilla:5.0 Platform:X11 OS:Ubuntu Browser:Firefox-50.0 Engine:Gecko-20100101 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Ubuntu", Name: "Ubuntu"},
+	},
+	{
+		title:      "FirefoxWin",
+		ua:         "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14",
+		expected:   "Mozilla:5.0 Platform:Windows OS:Windows XP Localization:en-US Browser:Firefox-2.0.0.14 Engine:Gecko-20080404 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Windows XP", Name: "Windows", Version: "XP"},
+	},
+	{
+		title:    "Firefox29Win7",
+		ua:       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows 7 Browser:Firefox-29.0 Engine:Gecko-20100101 Bot:false Mobile:false",
+	},
+	{
+		title:      "CaminoMac",
+		ua:         "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en; rv:1.8.1.14) Gecko/20080409 Camino/1.6 (like Firefox/2.0.0.14)",
+		expected:   "Mozilla:5.0 Platform:Macintosh OS:Intel Mac OS X Localization:en Browser:Camino-1.6 Engine:Gecko-20080409 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Intel Mac OS X", Name: "Mac OS X"},
+	},
+	{
+		title:      "Iceweasel",
+		ua:         "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1) Gecko/20061024 Iceweasel/2.0 (Debian-2.0+dfsg-1)",
+		expected:   "Mozilla:5.0 Platform:X11 OS:Linux i686 Localization:en-US Browser:Iceweasel-2.0 Engine:Gecko-20061024 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Linux i686", Name: "Linux"},
+	},
+	{
+		title:    "SeaMonkey",
+		ua:       "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.1.4) Gecko/20091017 SeaMonkey/2.0",
+		expected: "Mozilla:5.0 Platform:Macintosh OS:Intel Mac OS X 10.6 Localization:en-US Browser:SeaMonkey-2.0 Engine:Gecko-20091017 Bot:false Mobile:false",
+	},
+	{
+		title:    "AndroidFirefox",
+		ua:       "Mozilla/5.0 (Android; Mobile; rv:17.0) Gecko/17.0 Firefox/17.0",
+		expected: "Mozilla:5.0 Platform:Mobile OS:Android Browser:Firefox-17.0 Engine:Gecko-17.0 Bot:false Mobile:true",
+	},
+	{
+		title:    "AndroidFirefoxNougat",
+		ua:       "Mozilla/5.0 (Android 7.0; Mobile; rv:60.0) Gecko/60.0 Firefox/60.0",
+		expected: "Mozilla:5.0 Platform:Mobile OS:Android 7.0 Browser:Firefox-60.0 Engine:Gecko-60.0 Bot:false Mobile:true",
+	},
+	{
+		title:      "AndroidFirefoxTablet",
+		ua:         "Mozilla/5.0 (Android; Tablet; rv:26.0) Gecko/26.0 Firefox/26.0",
+		expected:   "Mozilla:5.0 Platform:Tablet OS:Android Browser:Firefox-26.0 Engine:Gecko-26.0 Bot:false Mobile:true",
+		expectedOS: &ua.OSInfo{FullName: "Android", Name: "Android"},
+	},
+	{
+		title:      "FirefoxOS",
+		ua:         "Mozilla/5.0 (Mobile; rv:26.0) Gecko/26.0 Firefox/26.0",
+		expected:   "Mozilla:5.0 Platform:Mobile OS:FirefoxOS Browser:Firefox-26.0 Engine:Gecko-26.0 Bot:false Mobile:true",
+		expectedOS: &ua.OSInfo{FullName: "FirefoxOS", Name: "FirefoxOS"},
+	},
+	{
+		title:    "FirefoxOSTablet",
+		ua:       "Mozilla/5.0 (Tablet; rv:26.0) Gecko/26.0 Firefox/26.0",
+		expected: "Mozilla:5.0 Platform:Tablet OS:FirefoxOS Browser:Firefox-26.0 Engine:Gecko-26.0 Bot:false Mobile:true",
+	},
+	{
+		title:      "FirefoxWinXP",
+		ua:         "Mozilla/5.0 (Windows NT 5.2; rv:31.0) Gecko/20100101 Firefox/31.0",
+		expected:   "Mozilla:5.0 Platform:Windows OS:Windows XP x64 Edition Browser:Firefox-31.0 Engine:Gecko-20100101 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Windows XP x64 Edition", Name: "Windows", Version: "XP"},
+	},
+	{
+		title:    "FirefoxMRA",
+		ua:       "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:24.0) Gecko/20130405 MRA 5.5 (build 02842) Firefox/24.0 (.NET CLR 3.5.30729)",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows XP Localization:en-US Browser:Firefox-24.0 Engine:Gecko-20130405 Bot:false Mobile:false",
+	},
+
+	// Opera
+	{
+		title:      "OperaMac",
+		ua:         "Opera/9.27 (Macintosh; Intel Mac OS X; U; en)",
+		expected:   "Platform:Macintosh OS:Intel Mac OS X Localization:en Browser:Opera-9.27 Engine:Presto Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Intel Mac OS X", Name: "Mac OS X"},
+	},
+	{
+		title:    "OperaWin",
+		ua:       "Opera/9.27 (Windows NT 5.1; U; en)",
+		expected: "Platform:Windows OS:Windows XP Localization:en Browser:Opera-9.27 Engine:Presto Bot:false Mobile:false",
+	},
+	{
+		title:    "OperaWinNoLocale",
+		ua:       "Opera/9.80 (Windows NT 5.1) Presto/2.12.388 Version/12.10",
+		expected: "Platform:Windows OS:Windows XP Browser:Opera-9.80 Engine:Presto-2.12.388 Bot:false Mobile:false",
+	},
+	{
+		title:      "OperaWin2Comment",
+		ua:         "Opera/9.80 (Windows NT 6.0; WOW64) Presto/2.12.388 Version/12.15",
+		expected:   "Platform:Windows OS:Windows Vista Browser:Opera-9.80 Engine:Presto-2.12.388 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Windows Vista", Name: "Windows", Version: "Vista"},
+	},
+	{
+		title:    "OperaMinimal",
+		ua:       "Opera/9.80",
+		expected: "Browser:Opera-9.80 Engine:Presto Bot:false Mobile:false",
+	},
+	{
+		title:    "OperaFull",
+		ua:       "Opera/9.80 (Windows NT 6.0; U; en) Presto/2.2.15 Version/10.10",
+		expected: "Platform:Windows OS:Windows Vista Localization:en Browser:Opera-9.80 Engine:Presto-2.2.15 Bot:false Mobile:false",
+	},
+	{
+		title:    "OperaLinux",
+		ua:       "Opera/9.80 (X11; Linux x86_64) Presto/2.12.388 Version/12.10",
+		expected: "Platform:X11 OS:Linux x86_64 Browser:Opera-9.80 Engine:Presto-2.12.388 Bot:false Mobile:false",
+	},
+	{
+		title:      "OperaLinux - Ubuntu V41",
+		ua:         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36 OPR/41.0.2353.69",
+		expected:   "Mozilla:5.0 Platform:X11 OS:Linux x86_64 Browser:Opera-41.0.2353.69 Engine:AppleWebKit-537.36 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Linux x86_64", Name: "Linux"},
+	},
+	{
+		title:      "OperaAndroid",
+		ua:         "Opera/9.80 (Android 4.2.1; Linux; Opera Mobi/ADR-1212030829) Presto/2.11.355 Version/12.10",
+		expected:   "Platform:Android 4.2.1 OS:Linux Browser:Opera-9.80 Engine:Presto-2.11.355 Bot:false Mobile:true",
+		expectedOS: &ua.OSInfo{FullName: "Linux", Name: "Linux"},
+	},
+	{
+		title:    "OperaNested",
+		ua:       "Opera/9.80 (Windows NT 5.1; MRA 6.0 (build 5831)) Presto/2.12.388 Version/12.10",
+		expected: "Platform:Windows OS:Windows XP Browser:Opera-9.80 Engine:Presto-2.12.388 Bot:false Mobile:false",
+	},
+	{
+		title:    "OperaMRA",
+		ua:       "Opera/9.80 (Windows NT 6.1; U; MRA 5.8 (build 4139); en) Presto/2.9.168 Version/11.50",
+		expected: "Platform:Windows OS:Windows 7 Localization:en Browser:Opera-9.80 Engine:Presto-2.9.168 Bot:false Mobile:false",
+	},
+
+	// Yandex Browser
+	{
+		title:      "YandexBrowserLinux",
+		ua:         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.99 YaBrowser/19.1.0.2494 (beta) Yowser/2.5 Safari/537.36",
+		expected:   "Mozilla:5.0 Platform:X11 OS:Linux x86_64 Browser:YaBrowser-19.1.0.2494 Engine:AppleWebKit-537.36 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Linux x86_64", Name: "Linux"},
+	},
+
+	{
+		title:    "YandexBrowserWindows",
+		ua:       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 YaBrowser/17.3.1.840 Yowser/2.5 Safari/537.36",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows 7 Browser:YaBrowser-17.3.1.840 Engine:AppleWebKit-537.36 Bot:false Mobile:false",
+	},
+
+	{
+		title:    "YandexBrowserAndroid",
+		ua:       "Mozilla/5.0 (Linux; Android 4.4.4; GT-I9300I Build/KTU84P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 YaBrowser/17.9.0.523.00 Mobile Safari/537.36",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 4.4.4 Device:GT-I9300I Browser:YaBrowser-17.9.0.523.00 Engine:AppleWebKit-537.36 Bot:false Mobile:true",
+	},
+
+	{
+		title:    "YandexBrowserIOS",
+		ua:       "Mozilla/5.0 (iPad; CPU OS 10_1_1 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 YaBrowser/16.11.1.716.11 Mobile/14B100 Safari/602.1",
+		expected: "Mozilla:5.0 Platform:iPad OS:CPU OS 10_1_1 like Mac OS X Device:iPad Browser:YaBrowser-16.11.1.716.11 Engine:AppleWebKit-602.1.50 Bot:false Mobile:true",
+	},
+	// Other
+	{
+		title:    "Empty",
+		ua:       "",
+		expected: "Bot:false Mobile:false",
+	},
+	{
+		title:    "Nil",
+		ua:       "nil",
+		expected: "Browser:nil Bot:false Mobile:false",
+	},
+	{
+		title:    "Compatible",
+		ua:       "Mozilla/4.0 (compatible)",
+		expected: "Browser:Mozilla-4.0 Bot:false Mobile:false",
+	},
+	{
+		title:    "Mozilla",
+		ua:       "Mozilla/5.0",
+		expected: "Browser:Mozilla-5.0 Bot:false Mobile:false",
+	},
+	{
+		title:    "Amaya",
+		ua:       "amaya/9.51 libwww/5.4.0",
+		expected: "Browser:amaya-9.51 Engine:libwww-5.4.0 Bot:false Mobile:false",
+	},
+	{
+		title:    "Rails",
+		ua:       "Rails Testing",
+		expected: "Browser:Rails Engine:Testing Bot:false Mobile:false",
+	},
+	{
+		title:    "Python",
+		ua:       "Python-urllib/2.7",
+		expected: "Browser:Python-urllib-2.7 Bot:false Mobile:false",
+	},
+	{
+		title:    "Curl",
+		ua:       "curl/7.28.1",
+		expected: "Browser:curl-7.28.1 Bot:false Mobile:false",
+	},
+	{
+		title:    "OkHttp",
+		ua:       "okhttp/4.2.2",
+		expected: "Browser:OkHttp-4.2.2 Bot:false Mobile:true",
+	},
+
+	// WebKit
+	{
+		title:      "ChromeLinux",
+		ua:         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11",
+		expected:   "Mozilla:5.0 Platform:X11 OS:Linux x86_64 Browser:Chrome-23.0.1271.97 Engine:AppleWebKit-537.11 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Linux x86_64", Name: "Linux"},
+	},
+	{
+		title:    "ChromeLinux - Ubuntu V55",
+		ua:       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36",
+		expected: "Mozilla:5.0 Platform:X11 OS:Linux x86_64 Browser:Chrome-55.0.2883.75 Engine:AppleWebKit-537.36 Bot:false Mobile:false",
+	},
+	{
+		title:    "ChromeWin7",
+		ua:       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows 7 Browser:Chrome-18.0.1025.168 Engine:AppleWebKit-535.19 Bot:false Mobile:false",
+	},
+	{
+		title:    "ChromeMinimal",
+		ua:       "Mozilla/5.0 AppleWebKit/534.10 Chrome/8.0.552.215 Safari/534.10",
+		expected: "Mozilla:5.0 Browser:Chrome-8.0.552.215 Engine:AppleWebKit-534.10 Bot:false Mobile:false",
+	},
+	{
+		title:      "ChromeMac",
+		ua:         "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_5; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/8.0.552.231 Safari/534.10",
+		expected:   "Mozilla:5.0 Platform:Macintosh OS:Intel Mac OS X 10_6_5 Localization:en-US Browser:Chrome-8.0.552.231 Engine:AppleWebKit-534.10 Bot:false Mobile:false",
+		expectedOS: &ua.OSInfo{FullName: "Intel Mac OS X 10_6_5", Name: "Mac OS X", Version: "10.6.5"},
+	},
+	{
+		title:    "Headless Chrome",
+		ua:       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/92.0.4515.107 Safari/537.36",
+		expected: "Mozilla:5.0 Platform:X11 OS:Linux x86_64 Browser:Headless Chrome-92.0.4515.107 Engine:AppleWebKit-537.36 Bot:false Mobile:false",
+	},
+	{
+		title:    "SafariMac",
+		ua:       "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_3; en-us) AppleWebKit/533.16 (KHTML, like Gecko) Version/5.0 Safari/533.16",
+		expected: "Mozilla:5.0 Platform:Macintosh OS:Intel Mac OS X 10_6_3 Localization:en-us Browser:Safari-5.0 Engine:AppleWebKit-533.16 Bot:false Mobile:false",
+	},
+	{
+		title:    "SafariWin",
+		ua:       "Mozilla/5.0 (Windows; U; Windows NT 5.1; en) AppleWebKit/526.9 (KHTML, like Gecko) Version/4.0dp1 Safari/526.8",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows XP Localization:en Browser:Safari-4.0dp1 Engine:AppleWebKit-526.9 Bot:false Mobile:false",
+	},
+	{
+		title:      "iPhone7",
+		ua:         "Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_3 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11B511 Safari/9537.53",
+		expected:   "Mozilla:5.0 Platform:iPhone OS:CPU iPhone OS 7_0_3 like Mac OS X Device:iPhone Browser:Safari-7.0 Engine:AppleWebKit-537.51.1 Bot:false Mobile:true",
+		expectedOS: &ua.OSInfo{FullName: "CPU iPhone OS 7_0_3 like Mac OS X", Name: "iPhone OS", Version: "7.0.3"},
+	},
+	{
+		title:    "iPhone",
+		ua:       "Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420.1 (KHTML, like Gecko) Version/3.0 Mobile/4A102 Safari/419",
+		expected: "Mozilla:5.0 Platform:iPhone OS:CPU like Mac OS X Localization:en Device:iPhone Browser:Safari-3.0 Engine:AppleWebKit-420.1 Bot:false Mobile:true",
+	},
+	{
+		title:    "iPod",
+		ua:       "Mozilla/5.0 (iPod; U; CPU like Mac OS X; en) AppleWebKit/420.1 (KHTML, like Gecko) Version/3.0 Mobile/4A102 Safari/419",
+		expected: "Mozilla:5.0 Platform:iPod OS:CPU like Mac OS X Localization:en Browser:Safari-3.0 Engine:AppleWebKit-420.1 Bot:false Mobile:true",
+	},
+	{
+		title:    "iPad",
+		ua:       "Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B367 Safari/531.21.10",
+		expected: "Mozilla:5.0 Platform:iPad OS:CPU OS 3_2 like Mac OS X Localization:en-us Device:iPad Browser:Safari-4.0.4 Engine:AppleWebKit-531.21.10 Bot:false Mobile:true",
+	},
+	{
+		title:    "webOS",
+		ua:       "Mozilla/5.0 (webOS/1.4.0; U; en-US) AppleWebKit/532.2 (KHTML, like Gecko) Version/1.0 Safari/532.2 Pre/1.1",
+		expected: "Mozilla:5.0 Platform:webOS OS:Palm Localization:en-US Browser:webOS-1.0 Engine:AppleWebKit-532.2 Bot:false Mobile:true",
+	},
+	{
+		title:    "Android",
+		ua:       "Mozilla/5.0 (Linux; U; Android 1.5; de-; HTC Magic Build/PLAT-RC33) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 1.5 Localization:de- Device:HTC Magic Browser:Android-3.1.2 Engine:AppleWebKit-528.5+ Bot:false Mobile:true",
+	},
+	{
+		title:      "BlackBerry",
+		ua:         "Mozilla/5.0 (BlackBerry; U; BlackBerry 9800; en) AppleWebKit/534.1+ (KHTML, Like Gecko) Version/6.0.0.141 Mobile Safari/534.1+",
+		expected:   "Mozilla:5.0 Platform:BlackBerry OS:BlackBerry 9800 Localization:en Browser:BlackBerry-6.0.0.141 Engine:AppleWebKit-534.1+ Bot:false Mobile:true",
+		expectedOS: &ua.OSInfo{FullName: "BlackBerry 9800", Name: "BlackBerry", Version: "9800"},
+	},
+	{
+		title:    "BB10",
+		ua:       "Mozilla/5.0 (BB10; Touch) AppleWebKit/537.3+ (KHTML, like Gecko) Version/10.0.9.388 Mobile Safari/537.3+",
+		expected: "Mozilla:5.0 Platform:BlackBerry OS:BlackBerry Browser:BlackBerry-10.0.9.388 Engine:AppleWebKit-537.3+ Bot:false Mobile:true",
+	},
+	{
+		title:      "Ericsson",
+		ua:         "Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Profile/MIDP-2.1 Configuration/CLDC-1.1) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525",
+		expected:   "Mozilla:5.0 Platform:Symbian OS:SymbianOS/9.4 Browser:Symbian-3.0 Engine:AppleWebKit-525 Bot:false Mobile:true",
+		expectedOS: &ua.OSInfo{FullName: "SymbianOS/9.4", Name: "SymbianOS", Version: "9.4"},
+	},
+	{
+		title:    "ChromeAndroid",
+		ua:       "Mozilla/5.0 (Linux; Android 4.2.1; Galaxy Nexus Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 4.2.1 Device:Galaxy Nexus Browser:Chrome-18.0.1025.166 Engine:AppleWebKit-535.19 Bot:false Mobile:true",
+	},
+	{
+		title:    "Chrome for iOS",
+		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 11_3_1 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) CriOS/67.0.3396.87 Mobile/15E302 Safari/604.1",
+		expected: "Mozilla:5.0 Platform:iPhone OS:CPU iPhone OS 11_3_1 like Mac OS X Device:iPhone Browser:Chrome-67.0.3396.87 Engine:AppleWebKit-604.1.34 Bot:false Mobile:true",
+	},
+	{
+		title:    "WebkitNoPlatform",
+		ua:       "Mozilla/5.0 (en-us) AppleWebKit/525.13 (KHTML, like Gecko; Google Web Preview) Version/3.1 Safari/525.13",
+		expected: "Mozilla:5.0 Platform:en-us Localization:en-us Browser:Safari-3.1 Engine:AppleWebKit-525.13 Bot:false Mobile:false",
+	},
+	{
+		title:    "OperaWebkitMobile",
+		ua:       "Mozilla/5.0 (Linux; Android 4.2.2; Galaxy Nexus Build/JDQ39) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.58 Mobile Safari/537.31 OPR/14.0.1074.57453",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 4.2.2 Device:Galaxy Nexus Browser:Opera-14.0.1074.57453 Engine:AppleWebKit-537.31 Bot:false Mobile:true",
+	},
+	{
+		title:    "OperaWebkitDesktop",
+		ua:       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.58 Safari/537.31 OPR/14.0.1074.57453",
+		expected: "Mozilla:5.0 Platform:X11 OS:Linux x86_64 Browser:Opera-14.0.1074.57453 Engine:AppleWebKit-537.31 Bot:false Mobile:false",
+	},
+	{
+		title:    "ChromeNothingAfterU",
+		ua:       "Mozilla/5.0 (Linux; U) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.79 Safari/537.4",
+		expected: "Mozilla:5.0 Platform:Linux OS:Linux Browser:Chrome-22.0.1229.79 Engine:AppleWebKit-537.4 Bot:false Mobile:false",
+	},
+	{
+		title:    "SafariOnSymbian",
+		ua:       "Mozilla/5.0 (SymbianOS/9.1; U; [en-us]) AppleWebKit/413 (KHTML, like Gecko) Safari/413",
+		expected: "Mozilla:5.0 Platform:Symbian OS:SymbianOS/9.1 Browser:Symbian-413 Engine:AppleWebKit-413 Bot:false Mobile:true",
+	},
+	{
+		title:    "Chromium - Ubuntu V49",
+		ua:       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/49.0.2623.108 Chrome/49.0.2623.108 Safari/537.36",
+		expected: "Mozilla:5.0 Platform:X11 OS:Linux x86_64 Browser:Chromium-49.0.2623.108 Engine:AppleWebKit-537.36 Bot:false Mobile:false",
+	},
+	{
+		title:    "Chromium - Ubuntu V55",
+		ua:       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36",
+		expected: "Mozilla:5.0 Platform:X11 OS:Linux x86_64 Browser:Chromium-53.0.2785.143 Engine:AppleWebKit-537.36 Bot:false Mobile:false",
+	},
+	{
+		title:    "Firefox for iOS",
+		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 8_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) FxiOS/1.0 Mobile/12F69 Safari/600.1.4",
+		expected: "Mozilla:5.0 Platform:iPhone OS:CPU iPhone OS 8_3 like Mac OS X Device:iPhone Browser:Firefox-1.0 Engine:AppleWebKit-600.1.4 Bot:false Mobile:true",
+	},
+	{
+		title:    "Firefox Focus for iOS",
+		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/7.0.4 Mobile/16B91 Safari/605.1.15",
+		expected: "Mozilla:5.0 Platform:iPhone OS:CPU iPhone OS 12_1 like Mac OS X Device:iPhone Browser:Firefox-7.0.4 Engine:AppleWebKit-605.1.15 Bot:false Mobile:true",
+	},
+	{
+		title:    "Firefox on iPad",
+		ua:       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/24.1 Safari/605.1.15",
+		expected: "Mozilla:5.0 Platform:iPad OS:Intel Mac OS X 10.15 Device:iPad Browser:Firefox-24.1 Engine:AppleWebKit-605.1.15 Bot:false Mobile:true",
+	},
+	{
+		title:    "Electron",
+		ua:       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) CozyDrive/3.17.0  Chrome/73.0.3683.119 Electron/5.0.0 Safari/537.36",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows 10 Browser:Electron-5.0.0 Engine:AppleWebKit-537.36 Bot:false Mobile:false",
+	},
+	{
+		title:    "Coc Coc",
+		ua:       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) coc_coc_browser/96.0.230 Chrome/90.0.4430.230 Safari/537.36",
+		expected: "Mozilla:5.0 Platform:Macintosh OS:Intel Mac OS X 10_15_7 Browser:Coc Coc-96.0.230 Engine:AppleWebKit-537.36 Bot:false Mobile:false",
+	},
+	{
+		title:    "LinkedInApp",
+		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [LinkedInApp]",
+		expected: "Mozilla:5.0 Platform:iPhone OS:CPU iPhone OS 14_6 like Mac OS X Device:iPhone Browser:Safari-15E148 Engine:AppleWebKit-605.1.15 Bot:false Mobile:true",
+	},
+	{
+		title:    "Google App for iOS",
+		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 14_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) GSA/170.0.386351093 Mobile/15E148 Safari/604.1",
+		expected: "Mozilla:5.0 Platform:iPhone OS:CPU iPhone OS 14_1 like Mac OS X Device:iPhone Browser:Google App-170.0.386351093 Engine:AppleWebKit-605.1.15 Bot:false Mobile:true",
+	},
+	{
+		title:    "DuckDuckGo Browser for iOS",
+		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.6 Mobile/15E148 DuckDuckGo/7 Safari/605.1.15",
+		expected: "Mozilla:5.0 Platform:iPhone OS:CPU iPhone OS 14_6 like Mac OS X Device:iPhone Browser:DuckDuckGo-7 Engine:AppleWebKit-605.1.15 Bot:false Mobile:true",
+	},
+
+	// Dalvik
+	{
+		title:    "Dalvik - Dell:001DL",
+		ua:       "Dalvik/1.2.0 (Linux; U; Android 2.2.2; 001DL Build/FRG83G)",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 2.2.2 Device:001DL Bot:false Mobile:true",
+	},
+	{
+		title:    "Dalvik - HTC:001HT",
+		ua:       "Dalvik/1.4.0 (Linux; U; Android 2.3.3; 001HT Build/GRI40)",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 2.3.3 Device:001HT Bot:false Mobile:true",
+	},
+	{
+		title:    "Dalvik - ZTE:009Z",
+		ua:       "Dalvik/1.4.0 (Linux; U; Android 2.3.4; 009Z Build/GINGERBREAD)",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 2.3.4 Device:009Z Bot:false Mobile:true",
+	},
+	{
+		title:    "Dalvik - A850",
+		ua:       "Dalvik/1.6.0 (Linux; U; Android 4.2.2; A850 Build/JDQ39) Configuration/CLDC-1.1; Opera Mini/att/4.2",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 4.2.2 Device:A850 Bot:false Mobile:true",
+	},
+	{
+		title:      "Dalvik - Asus:T00Q",
+		ua:         "Dalvik/1.6.0 (Linux; U; Android 4.4.2; ASUS_T00Q Build/KVT49L)/CLDC-1.1",
+		expected:   "Mozilla:5.0 Platform:Linux OS:Android 4.4.2 Device:ASUS_T00Q Bot:false Mobile:true",
+		expectedOS: &ua.OSInfo{FullName: "Android 4.4.2", Name: "Android", Version: "4.4.2"},
+	},
+	{
+		title:    "Dalvik - W2430",
+		ua:       "Dalvik/1.6.0 (Linux; U; Android 4.0.4; W2430 Build/IMM76D)014; Profile/MIDP-2.1 Configuration/CLDC-1",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 4.0.4 Device:W2430 Bot:false Mobile:true",
+	},
+	{
+		title:    "Samsung S5 Facebook App",
+		ua:       "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/43.0.2357.121 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/35.0.0.48.273;]",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 5.0 Localization:wv Device:SM-G900P Browser:Android-4.0 Engine:AppleWebKit-537.36 Bot:false Mobile:true",
+	},
+	{
+		title:    "Facebook - No Browser Or OS",
+		ua:       "[FBAN/FB4A;FBAV/16.0.0.20.15;FBBV/4061184;FBDM/{density=1.5,width=540,height=960};FBLC/en_US;FB_FW/2;FBCR/MY CELCOM;FBPN/com.facebook.katana;FBDV/Lenovo A850+;FBSV/4.2.2;FBOP/1;FBCA/armeabi-v7a:armeabi;]",
+		expected: "Bot:false Mobile:false",
+	},
+
+	// arm_64
+	{
+		title:    "Samsung S7 Edge - YaBrowser",
+		ua:       "Mozilla/5.0 (Linux; arm_64; Android 8.0.0; SM-G935F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 YaBrowser/19.12.3.101.00 Mobile Safari/537.36",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 8.0.0 Localization:SM-G935F Device:SM-G935F Browser:YaBrowser-19.12.3.101.00 Engine:AppleWebKit-537.36 Bot:false Mobile:true",
+	},
+
+	// Get Phone Model
+	{
+		title:    "HUAWEI P20 lite - YaBrowser",
+		ua:       "Mozilla/5.0 (Linux; arm_64; Android 9; ANE-LX2J) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.136 YaBrowser/20.2.6.114.00 Mobile Safari/537.36",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 9 Localization:ANE-LX2J Device:ANE-LX2J Browser:YaBrowser-20.2.6.114.00 Engine:AppleWebKit-537.36 Bot:false Mobile:true",
+	},
+	{
+		title:    "OPPO R9sk",
+		ua:       "Mozilla/5.0 (Linux; Android 7.1.1; OPPO R9sk) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.111 Mobile Safari/537.36",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 7.1.1 Device:OPPO R9sk Browser:Chrome-76.0.3809.111 Engine:AppleWebKit-537.36 Bot:false Mobile:true",
+	},
+	{
+		title:    "Nexus One",
+		ua:       "Mozilla/5.0 (Linux; U; Android 2.3.7; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 2.3.7 Localization:en-us Device:Nexus One Browser:Android-4.0 Engine:AppleWebKit-533.1 Bot:false Mobile:true",
+	},
+	{
+		title:    "HUAWEIELE",
+		ua:       "Mozilla/5.0 (Linux; Android 9; ELE-AL00 Build/HUAWEIELE-AL0001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/63.0.3239.83 Mobile Safari/537.36 T7/11.15 baiduboxapp/11.15.5.10 (Baidu; P1 9)",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 9 Localization:wv Device:ELE-AL00 Browser:Android-4.0 Engine:AppleWebKit-537.36 Bot:false Mobile:true",
+	},
+	{
+		title:    "Redmi Note 3",
+		ua:       "Mozilla/5.0 (Linux; U; Android 5.0.2; zh-cn; Redmi Note 3 Build/LRX22G) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.146 Mobile Safari/537.36 XiaoMi/MiuiBrowser/8.8.7",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 5.0.2 Localization:zh-cn Device:Redmi Note 3 Browser:Android-4.0 Engine:AppleWebKit-537.36 Bot:false Mobile:true",
+	},
+	{
+		title:    "XiaoMi 6",
+		ua:       "Mozilla/5.0 (Linux; Android 8.0.0; MI 6 Build/OPR1.170623.027; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/76.0.3809.89 Mobile Safari/537.36 T7/11.12 swan/2.11.0 baiduboxapp/11.15.0.0 (Baidu; P1 8.0.0)",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 8.0.0 Localization:wv Device:MI 6 Browser:Android-4.0 Engine:AppleWebKit-537.36 Bot:false Mobile:true",
+	},
+	{
+		title:    "HTC_Wildfire_A3333",
+		ua:       "Mozilla/5.0 (Linux; U; Android 2.2.1; zh-cn; HTC_Wildfire_A3333 Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+		expected: "Mozilla:5.0 Platform:Linux OS:Android 2.2.1 Localization:zh-cn Device:HTC_Wildfire_A3333 Browser:Android-4.0 Engine:AppleWebKit-533.1 Bot:false Mobile:true",
+	},
+}
+
+// The test suite.
+func TestUserAgent(t *testing.T) {
+	for _, tt := range uastrings {
+		uas := ua.New(tt.ua)
+		got := ua.Beautify(uas)
+		if tt.expected != got {
+			t.Error(tt.ua)
+			t.Errorf("\nTest     %v\ngot:     %q\nexpected %q\n", tt.title, got, tt.expected)
+		}
+
+		if tt.expectedOS != nil {
+			gotOSInfo := uas.OSInfo()
+			if !reflect.DeepEqual(tt.expectedOS, &gotOSInfo) {
+				t.Errorf("\nTest     %v\ngot:     %#v\nexpected %#v\n", tt.title, gotOSInfo, tt.expectedOS)
+			}
+		}
 
 	}
+}
 
+// Benchmark: it parses each User-Agent string on the uastrings slice b.N times.
+func BenchmarkUserAgent(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		b.StopTimer()
+		for _, tt := range uastrings {
+			ua := new(ua.UserAgent)
+			b.StartTimer()
+			ua.Parse(tt.ua)
+		}
+	}
 }
