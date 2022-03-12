@@ -2,7 +2,6 @@ package mobiledetect
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
@@ -30,8 +29,7 @@ const (
 
 // Device Vars returns the route variables for the current request, if any.
 func Device(r *http.Request) string {
-	fmt.Println(r.Context().Value("device"))
-	if rv := r.Context().Value("device"); rv != nil {
+	if rv := r.Context().Value("Device"); rv != nil {
 		return rv.(string)
 	}
 	return ""
@@ -63,11 +61,11 @@ func HandlerMux(s *http.ServeMux, rules *rules) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		m := New(r, rules)
 		if m.IsTablet() {
-			r = r.WithContext(context.WithValue(r.Context(), "device", "tablet"))
+			r = r.WithContext(context.WithValue(r.Context(), "Device", "Tablet"))
 		} else if m.IsMobile() {
-			r = r.WithContext(context.WithValue(r.Context(), "device", "mobile"))
+			r = r.WithContext(context.WithValue(r.Context(), "Device", "Mobile"))
 		} else {
-			r = r.WithContext(context.WithValue(r.Context(), "device", "desktop"))
+			r = r.WithContext(context.WithValue(r.Context(), "Device", "Desktop"))
 		}
 		s.ServeHTTP(w, r)
 	})
@@ -336,7 +334,7 @@ func (md *MobileDetect) isMobileGradeA(isMobile bool) bool {
 		(md.VersionFloat("Android") > 2.1 && md.Is("Webkit")) ||
 		md.VersionFloat("Windows Phone OS") >= 7.5 ||
 		md.Is("BlackBerry") && md.VersionFloat("BlackBerry") >= 6.0 ||
-		md.match("Playbook.*tablet") ||
+		md.match("Playbook.*Tablet") ||
 		(md.VersionFloat("webOS") >= 1.4 && md.match("Palm|Pre|Pixi")) ||
 		md.match("hp.*TouchPad") ||
 		(md.Is("Firefox") && md.VersionFloat("Firefox") >= 18) ||
@@ -372,8 +370,8 @@ func (md *MobileDetect) isMobileGradeB() bool {
 }
 
 func (md *MobileDetect) isMobileGradeC(isMobile bool) bool {
-	if md.VersionFloat("Blackberry") <= 5.0 || md.match("MSIEMobile|Windows CE.*mobile") || md.VersionFloat(
-		"Windows mobile") <= 5.2 || md.VersionFloat("iPad") <= 3.2 || md.VersionFloat("iPhone") <= 3.2 || md.
+	if md.VersionFloat("Blackberry") <= 5.0 || md.match("MSIEMobile|Windows CE.*Mobile") || md.VersionFloat(
+		"Windows Mobile") <= 5.2 || md.VersionFloat("iPad") <= 3.2 || md.VersionFloat("iPhone") <= 3.2 || md.
 		VersionFloat("iPod") <= 3.2 || md.VersionFloat("IE") <= 7.0 && !isMobile {
 		return true
 	}

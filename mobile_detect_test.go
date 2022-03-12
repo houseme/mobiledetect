@@ -60,12 +60,12 @@ func BasicMethodsData() []basicMethodsStruct {
 				"HTTP_X_REAL_IP":        "1.2.3.4",
 				"HTTP_X_FORWARDED_FOR":  "1.2.3.5",
 				"HTTP_CONNECTION":       "close",
-				"HTTP_USER_AGENT":       "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0_1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 mobile/10A523 Safari/8536.25",
+				"HTTP_USER_AGENT":       "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0_1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A523 Safari/8536.25",
 				"HTTP_ACCEPT":           "text/vnd.wap.wml, application/json, text/javascript, */*; q=0.01",
 				"HTTP_ACCEPT_LANGUAGE":  "en-us,en;q=0.5",
 				"HTTP_ACCEPT_ENCODING":  "gzip, deflate",
 				"HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
-				"HTTP_REFERER":          "http://mobiledetect.net",
+				"HTTP_REFERER":          "https://mobiledetect.net",
 				"HTTP_PRAGMA":           "no-cache",
 				"HTTP_CACHE_CONTROL":    "no-cache",
 				"REMOTE_ADDR":           "11.22.33.44",
@@ -134,7 +134,7 @@ func BasicMethodsData() []basicMethodsStruct {
 				"HTTP_X_REAL_IP":        "1.2.3.4",
 				"HTTP_X_FORWARDED_FOR":  "1.2.3.5",
 				"HTTP_CONNECTION":       "close",
-				"HTTP_USER_AGENT":       "Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/21.0.1180.80 mobile/9B206 Safari/7534.48.3 (6FF046A0-1BC4-4E7D-8A9D-6BF17622A123)",
+				"HTTP_USER_AGENT":       "Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/21.0.1180.80 Mobile/9B206 Safari/7534.48.3 (6FF046A0-1BC4-4E7D-8A9D-6BF17622A123)",
 				"HTTP_ACCEPT":           "application/json, text/javascript, */*; q=0.01",
 				"HTTP_ACCEPT_LANGUAGE":  "en-us,en;q=0.5",
 				"HTTP_ACCEPT_ENCODING":  "gzip, deflate",
@@ -171,7 +171,7 @@ func BasicMethodsData() []basicMethodsStruct {
 				"HTTP_X_REAL_IP":        "1.2.3.4",
 				"HTTP_X_FORWARDED_FOR":  "1.2.3.5",
 				"HTTP_CONNECTION":       "close",
-				"HTTP_USER_AGENT":       "Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/21.0.1180.80 mobile/9B206 Safari/7534.48.3 (6FF046A0-1BC4-4E7D-8A9D-6BF17622A123)",
+				"HTTP_USER_AGENT":       "Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/21.0.1180.80 Mobile/9B206 Safari/7534.48.3 (6FF046A0-1BC4-4E7D-8A9D-6BF17622A123)",
 				"HTTP_ACCEPT":           "application/json, text/javascript, */*; q=0.01",
 				"HTTP_ACCEPT_LANGUAGE":  "en-us,en;q=0.5",
 				"HTTP_ACCEPT_ENCODING":  "gzip, deflate",
@@ -222,11 +222,11 @@ func TestBasicMethods(t *testing.T) {
 		}
 
 		if data.isMobile != detect.IsMobile() {
-			t.Error("mobile detection failed")
+			t.Error("Mobile detection failed")
 		}
 
 		if data.isTablet != detect.IsTablet() {
-			t.Error("tablet detection failed")
+			t.Error("Tablet detection failed")
 		}
 
 		for _, customValue := range data.customValues {
@@ -332,37 +332,37 @@ func VersionData() []versionDataStruct {
 			floatVersion: 18.01025166,
 		},
 		versionDataStruct{
-			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`,
+			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`,
 			property:     `BlackBerry`,
 			strVersion:   `6.0.0.448`,
 			floatVersion: 6.00448,
 		},
 		versionDataStruct{
-			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`,
+			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`,
 			property:     `Webkit`,
 			strVersion:   `534.8`,
 			floatVersion: 534.8,
 		},
 		versionDataStruct{
-			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`,
+			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`,
 			property:     `Webkit`,
 			strVersion:   `534.8`,
 			floatVersion: 534.8,
 		},
 		versionDataStruct{
-			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`,
+			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`,
 			property:     `Unknown property`,
 			strVersion:   ``,
 			floatVersion: 0.0,
 		},
 		versionDataStruct{
-			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`,
+			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`,
 			property:     struct{}{},
 			strVersion:   ``,
 			floatVersion: 0.0,
 		},
 		versionDataStruct{
-			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`,
+			userAgent:    `Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`,
 			property:     PropAndroid,
 			strVersion:   ``,
 			floatVersion: 0.0,
@@ -406,8 +406,8 @@ func TestPreCompileRegexRules(t *testing.T) {
 
 func TestHandler(t *testing.T) {
 	expectedResults := map[string]string{
-		"mobile":  `Mozilla/5.0 (iPod touch; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 mobile/11A4449d Safari/9537.53`,
-		"tablet":  `Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/21.0.1180.80 mobile/9B206 Safari/7534.48.3 (6FF046A0-1BC4-4E7D-8A9D-6BF17622A123)`,
+		"mobile":  `Mozilla/5.0 (iPod touch; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A4449d Safari/9537.53`,
+		"tablet":  `Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/21.0.1180.80 Mobile/9B206 Safari/7534.48.3 (6FF046A0-1BC4-4E7D-8A9D-6BF17622A123)`,
 		"desktop": "UNKNOWN",
 	}
 
@@ -432,9 +432,9 @@ func TestHandler(t *testing.T) {
 
 func TestHandlerMux(t *testing.T) {
 	expectedResults := map[string]string{
-		"mobile":  `Mozilla/5.0 (iPod touch; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 mobile/11A4449d Safari/9537.53`,
-		"tablet":  `Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/21.0.1180.80 mobile/9B206 Safari/7534.48.3 (6FF046A0-1BC4-4E7D-8A9D-6BF17622A123)`,
-		"desktop": "UNKNOWN",
+		"Mobile":  `Mozilla/5.0 (iPod touch; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A4449d Safari/9537.53`,
+		"Tablet":  `Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/21.0.1180.80 Mobile/9B206 Safari/7534.48.3 (6FF046A0-1BC4-4E7D-8A9D-6BF17622A123)`,
+		"Desktop": "UNKNOWN",
 	}
 	mux := http.NewServeMux()
 	deviceHandler := &basicMethodsStruct{}
@@ -458,7 +458,7 @@ func TestHandlerMux(t *testing.T) {
 func BenchmarkIsMobile(b *testing.B) {
 	req, _ := http.NewRequest("GET", "URL", strings.NewReader(""))
 	detect := New(req, nil)
-	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`)
+	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
 		detect.IsMobile()
 	}
@@ -467,7 +467,7 @@ func BenchmarkIsMobile(b *testing.B) {
 func BenchmarkIs(b *testing.B) {
 	req, _ := http.NewRequest("GET", "URL", strings.NewReader(""))
 	detect := New(req, nil)
-	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`)
+	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
 		detect.Is("iphone")
 	}
@@ -475,7 +475,7 @@ func BenchmarkIs(b *testing.B) {
 func BenchmarkIsKey(b *testing.B) {
 	req, _ := http.NewRequest("GET", "URL", strings.NewReader(""))
 	detect := New(req, nil)
-	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`)
+	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
 		detect.IsKey(IPHONE)
 	}
@@ -484,7 +484,7 @@ func BenchmarkIsKey(b *testing.B) {
 func BenchmarkVersion(b *testing.B) {
 	req, _ := http.NewRequest("GET", "URL", strings.NewReader(""))
 	detect := New(req, nil)
-	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`)
+	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
 		detect.Version("iphone")
 	}
@@ -492,7 +492,7 @@ func BenchmarkVersion(b *testing.B) {
 func BenchmarkVersionKey(b *testing.B) {
 	req, _ := http.NewRequest("GET", "URL", strings.NewReader(""))
 	detect := New(req, nil)
-	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 mobile Safari/534.8`)
+	detect.SetUserAgent(`Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; en-US) AppleWebKit/534.8  (KHTML, like Gecko) Version/6.0.0.448 Mobile Safari/534.8`)
 	for n := 0; n < b.N; n++ {
 		detect.VersionKey(PropIphone)
 	}

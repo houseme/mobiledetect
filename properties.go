@@ -102,7 +102,7 @@ var (
 	props = [...][]string{
 		// Build
 		// MOBILE:PROP_
-		[]string{`mobile/[VER]`},
+		[]string{`Mobile/[VER]`},
 		// PROP_BUILD:
 		[]string{`Build/[VER]`},
 		// PROP_VERSION:
