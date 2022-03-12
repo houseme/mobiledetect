@@ -23,7 +23,7 @@
 
 ### Updates 
 
-#### Version 1.1.2
+#### Version 1.2.0
 
 
 ### Why is it useful?
@@ -31,6 +31,7 @@
 There are different ways of using the package: 
 
 - [Basic usage](examples/app.go) 
+- [Parsing user agent](examples/ua/ua.go) 
 - [Basic router implementation](examples/router/main.go)
 - [Handler interface implementation](examples/handler/main.go)
 - [Mux interface implementation](examples/mux/main.go)

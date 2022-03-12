@@ -1,5 +1,5 @@
 # Go/Golang package for parsing user agent strings
-[![GoDoc](https://pkg.go.dev/badge/github.com/houseme/go-mobile-detect.svg)](https://pkg.go.dev/github.com/houseme/go-mobile-detect)
+[![GoDoc](https://pkg.go.dev/badge/github.com/houseme/mobiledetect.svg)](https://pkg.go.dev/github.com/houseme/mobiledetect)
 
 Package `ua.Parse(userAgent string)` function parses browser's and bot's user agents strings and determins:
 + User agent name and version (Chrome, Firefox, Googlebot, etc.)
