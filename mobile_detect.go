@@ -79,7 +79,7 @@ type MobileDetect struct {
 	userAgent          string
 	httpHeaders        map[string]string
 	compiledRegexRules map[string]*regexp.Regexp
-	*ua.properties
+	*properties
 }
 
 // New creates the MobileDetect object
@@ -90,14 +90,14 @@ func New(r *http.Request, rules *rules) *MobileDetect {
 	md := &MobileDetect{
 		rules:              rules,
 		userAgent:          r.UserAgent(),
-		httpHeaders:        getHTTPHeaders(r),
+		httpHeaders:        httpHeaders(r),
 		compiledRegexRules: make(map[string]*regexp.Regexp, len(rules.mobileDetectionRules())),
 		properties:         newProperties(),
 	}
 	return md
 }
 
-func getHTTPHeaders(r *http.Request) map[string]string {
+func httpHeaders(r *http.Request) map[string]string {
 	httpHeaders := map[string]string{
 		"SERVER_SOFTWARE":  r.Header.Get("SERVER_SOFTWARE"),
 		"REQUEST_METHOD":   r.Method,

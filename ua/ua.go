@@ -2,6 +2,7 @@ package ua
 
 import (
 	"bytes"
+	"fmt"
 	"regexp"
 	"strings"
 )
@@ -20,6 +21,7 @@ type UserAgent struct {
 	version      string
 	os           string
 	osVersion    string
+	shortOS      string
 	device       string
 	mobile       bool
 	tablet       bool
@@ -30,7 +32,6 @@ type UserAgent struct {
 	platform     string
 	browser      Browser
 	mozilla      string
-	model        string
 	localization string
 	undecided    bool
 }
@@ -69,13 +70,17 @@ const (
 	Applebot            = "Applebot"
 )
 
-// Parse user agent string returning UserAgent struct
-func Parse(userAgent string) UserAgent {
-	ua := UserAgent{
-		ua: userAgent,
+// New parses the given User-Agent string and get the resulting UserAgent
+// object.
+//
+// Returns a UserAgent object that has been initialized after parsing
+// the given User-Agent string.
+func New(uas string) *UserAgent {
+	ua := &UserAgent{
+		ua: uas,
 	}
-
-	tokens := parse(userAgent)
+	ua.initialize()
+	tokens := parse(uas)
 
 	// check is there URL
 	for k := range tokens {
@@ -89,7 +94,7 @@ func Parse(userAgent string) UserAgent {
 	// OS lookup
 	switch {
 	case tokens.exists("Android"):
-		ua.os = Android
+		ua.shortOS = Android
 		ua.osVersion = tokens[Android]
 		for s := range tokens {
 			if strings.HasSuffix(s, "Build") {
@@ -99,39 +104,39 @@ func Parse(userAgent string) UserAgent {
 		}
 
 	case tokens.exists("iPhone"):
-		ua.os = IOS
+		ua.shortOS = IOS
 		ua.osVersion = tokens.findMacOSVersion()
 		ua.device = "iPhone"
 		ua.mobile = true
 
 	case tokens.exists("iPad"):
-		ua.os = IOS
+		ua.shortOS = IOS
 		ua.osVersion = tokens.findMacOSVersion()
 		ua.device = "iPad"
 		ua.tablet = true
 
 	case tokens.exists("Windows NT"):
-		ua.os = Windows
+		ua.shortOS = Windows
 		ua.osVersion = tokens["Windows NT"]
 		ua.desktop = true
 
 	case tokens.exists("Windows Phone OS"):
-		ua.os = WindowsPhone
+		ua.shortOS = WindowsPhone
 		ua.osVersion = tokens["Windows Phone OS"]
 		ua.mobile = true
 
 	case tokens.exists("Macintosh"):
-		ua.os = MacOS
+		ua.shortOS = MacOS
 		ua.osVersion = tokens.findMacOSVersion()
 		ua.desktop = true
 
 	case tokens.exists("Linux"):
-		ua.os = Linux
+		ua.shortOS = Linux
 		ua.osVersion = tokens[Linux]
 		ua.desktop = true
 
 	case tokens.exists("CrOS"):
-		ua.os = ChromeOS
+		ua.shortOS = ChromeOS
 		ua.osVersion = tokens[ChromeOS]
 		ua.desktop = true
 
@@ -291,7 +296,7 @@ func Parse(userAgent string) UserAgent {
 			ua.bot = true
 		}
 	}
-
+	ua.Parse(uas)
 	return ua
 }
 
@@ -381,16 +386,6 @@ func checkVer(s string) (name, v string) {
 	default:
 		return s, ""
 	}
-
-	// for _, c := range v {
-	// 	if (c >= 48 && c <= 57) || c == 46 {
-	// 	} else {
-	// 		return s, ""
-	// 	}
-	// }
-
-	// return s[:i], s[i+1:]
-
 }
 
 type properties map[string]string
@@ -433,7 +428,7 @@ func (p properties) findBestMatch(withVerOnly bool) string {
 	for i := 0; i < n; i++ {
 		for k, v := range p {
 			switch k {
-			case Chrome, Firefox, Safari, "Version", "mobile", "mobile Safari", "Mozilla", "AppleWebKit", "Windows NT", "Windows Phone OS", Android, "Macintosh", Linux, "GSA", ChromeOS:
+			case Chrome, Firefox, Safari, "Version", "mobile", "mobile Safari", "Mozilla", "AppleWebKit", "Windows NT", "Windows Phone OS", Android, "Macintosh", Linux, "GSA", ChromeOS, "Ubuntu":
 			default:
 				if i == 0 {
 					if v != "" { // in first check, only return keys with value
@@ -517,28 +512,28 @@ func (ua UserAgent) IsEdge() bool {
 	return ua.name == Edge
 }
 
-// IsGooglebot shorthand function to check if name == Googlebot
-func (ua UserAgent) IsGooglebot() bool {
+// IsGoogleBot shorthand function to check if name == Googlebot
+func (ua UserAgent) IsGoogleBot() bool {
 	return ua.name == Googlebot
 }
 
-// IsTwitterbot shorthand function to check if name == Twitterbot
-func (ua UserAgent) IsTwitterbot() bool {
+// IsTwitterBot shorthand function to check if name == Twitterbot
+func (ua UserAgent) IsTwitterBot() bool {
 	return ua.name == Twitterbot
 }
 
-// IsFacebookbot shorthand function to check if name == FacebookExternalHit
-func (ua UserAgent) IsFacebookbot() bool {
+// IsFacebookBot shorthand function to check if name == FacebookExternalHit
+func (ua UserAgent) IsFacebookBot() bool {
 	return ua.name == FacebookExternalHit
 }
 
-// detectModel some properties of the model from the given section.
-func (ua *UserAgent) detectModel(s section) {
+// detectDevice some properties of the device from the given section.
+func (ua *UserAgent) detectDevice(s section) {
 	if !ua.mobile {
 		return
 	}
 	if ua.platform == "iPhone" || ua.platform == "iPad" {
-		ua.model = ua.platform
+		ua.device = ua.platform
 		return
 	}
 	// Android model
@@ -549,7 +544,7 @@ func (ua *UserAgent) detectModel(s section) {
 		}
 		tmp := strings.Split(mostAndroidModel, "Build")
 		if len(tmp) > 0 {
-			ua.model = strings.Trim(tmp[0], " ")
+			ua.device = strings.Trim(tmp[0], " ")
 			return
 		}
 	}
@@ -557,7 +552,7 @@ func (ua *UserAgent) detectModel(s section) {
 	for _, v := range s.comment {
 		if strings.Contains(v, "Build") {
 			tmp := strings.Split(v, "Build")
-			ua.model = strings.Trim(tmp[0], " ")
+			ua.device = strings.Trim(tmp[0], " ")
 		}
 	}
 }
@@ -721,7 +716,7 @@ func (ua *UserAgent) OSVersion() string {
 	return ua.osVersion
 }
 
-// Device returns a string containing the name of the device.
+// Device returns a string containing the Phone Model like "Nexus 5X".
 func (ua *UserAgent) Device() string {
 	return ua.device
 }
@@ -777,7 +772,186 @@ func (ua *UserAgent) Localization() string {
 	return ua.localization
 }
 
-// Model returns a string containing the Phone Model like "Nexus 5X"
-func (ua *UserAgent) Model() string {
-	return ua.model
+// New parses the given User-Agent string and get the resulting UserAgent
+// object.
+//
+// Returns an UserAgent object that has been initialized after parsing
+// the given User-Agent string.
+// func New(ua string) *UserAgent {
+// 	o := &UserAgent{}
+// 	o.Parse(ua)
+// 	return o
+// }
+
+// Parse the given User-Agent string. After calling this function, the
+// receiver will be setted up with all the information that we've extracted.
+func (ua *UserAgent) Parse(str string) {
+	var sections []section
+
+	ua.ua = str
+	for index, limit := 0, len(str); index < limit; {
+		s := parseSection(str, &index)
+		if !ua.mobile && s.name == "Mobile" {
+			ua.mobile = true
+		}
+		sections = append(sections, s)
+	}
+
+	if len(sections) > 0 {
+		if sections[0].name == "Mozilla" {
+			ua.mozilla = sections[0].version
+		}
+
+		ua.detectBrowser(sections)
+		ua.detectOS(sections[0])
+		ua.detectDevice(sections[0])
+		if ua.undecided {
+			ua.checkBot(sections)
+		}
+	}
+}
+
+// Read from the given string until the given delimiter or the
+// end of the string have been reached.
+//
+// The first argument is the user agent string being parsed. The second
+// argument is a reference pointing to the current index of the user agent
+// string. The delimiter argument specifies which character is the delimiter
+// and the cat argument determines whether nested '(' should be ignored or not.
+//
+// Returns an array of bytes containing what has been read.
+func readUntil(ua string, index *int, delimiter byte, cat bool) []byte {
+	var buffer []byte
+
+	i := *index
+	catalan := 0
+	for ; i < len(ua); i = i + 1 {
+		if ua[i] == delimiter {
+			if catalan == 0 {
+				*index = i + 1
+				return buffer
+			}
+			catalan--
+		} else if cat && ua[i] == '(' {
+			catalan++
+		}
+		buffer = append(buffer, ua[i])
+	}
+	*index = i + 1
+	return buffer
+}
+
+// Parse the given product, that is, just a name or a string
+// formatted as Name/Version.
+//
+// It returns two strings. The first string is the name of the product and the
+// second string contains the version of the product.
+func parseProduct(product []byte) (string, string) {
+	prod := strings.SplitN(string(product), "/", 2)
+	if len(prod) == 2 {
+		return prod[0], prod[1]
+	}
+	return string(product), ""
+}
+
+// Parse a section. A section is typically formatted as follows
+// "Name/Version (comment)". Both, the comment and the version are optional.
+//
+// The first argument is the user agent string being parsed. The second
+// argument is a reference pointing to the current index of the user agent
+// string.
+//
+// Returns a section containing the information that we could extract
+// from the last parsed section.
+func parseSection(ua string, index *int) (s section) {
+	var buffer []byte
+
+	// Check for empty products
+	if *index < len(ua) && ua[*index] != '(' && ua[*index] != '[' {
+		buffer = readUntil(ua, index, ' ', false)
+		s.name, s.version = parseProduct(buffer)
+	}
+
+	if *index < len(ua) && ua[*index] == '(' {
+		*index++
+		buffer = readUntil(ua, index, ')', true)
+		s.comment = strings.Split(string(buffer), "; ")
+		*index++
+	}
+
+	// Discards any trailing data within square brackets
+	if *index < len(ua) && ua[*index] == '[' {
+		*index++
+		_ = readUntil(ua, index, ']', true)
+		*index++
+	}
+	return s
+}
+
+// Initialize the parser.
+func (ua *UserAgent) initialize() {
+	ua.ua = ""
+	ua.mozilla = ""
+	ua.platform = ""
+	ua.os = ""
+	ua.localization = ""
+	ua.device = ""
+	ua.browser.Engine = ""
+	ua.browser.EngineVersion = ""
+	ua.browser.Name = ""
+	ua.browser.Version = ""
+	ua.bot = false
+	ua.mobile = false
+	ua.undecided = false
+}
+
+// Beautify the given string.
+// Internal: beautify the UserAgent reference into a string so it can be
+// tested later on.
+//
+// ua - a UserAgent reference.
+//
+// Returns a string that contains the beautified representation.
+func Beautify(ua *UserAgent) (s string) {
+	if len(ua.Mozilla()) > 0 {
+		s += "Mozilla:" + ua.Mozilla() + " "
+	}
+	if len(ua.Platform()) > 0 {
+		s += "Platform:" + ua.Platform() + " "
+	}
+	if len(ua.OS()) > 0 {
+		s += "OS:" + ua.OS() + " "
+	}
+	if len(ua.Localization()) > 0 {
+		s += "Localization:" + ua.Localization() + " "
+	}
+	if len(ua.Device()) > 0 {
+		s += "Device:" + ua.Device() + " "
+	}
+	str1, str2 := ua.Browser()
+	if len(str1) > 0 {
+		s += "Browser:" + str1
+		if len(str2) > 0 {
+			s += "-" + str2 + " "
+		} else {
+			s += " "
+		}
+	}
+	str1, str2 = ua.Engine()
+	if len(str1) > 0 {
+		s += "Engine:" + str1
+		if len(str2) > 0 {
+			s += "-" + str2 + " "
+		} else {
+			s += " "
+		}
+	}
+	s += "Bot:" + fmt.Sprintf("%v", ua.Bot()) + " "
+	s += "Mobile:" + fmt.Sprintf("%v", ua.Mobile())
+	return s
+}
+
+// ShortOS returns the short name of the operating system.
+func (ua *UserAgent) ShortOS() string {
+	return ua.shortOS
 }

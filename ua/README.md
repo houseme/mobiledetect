@@ -45,13 +45,13 @@ func main() {
     }
 
     for _, s := range userAgents {
-        ua := ua.Parse(s)
+        ua := ua.ParseUA(s)
         fmt.Println()
         fmt.Println(ua.UA())
         fmt.Println(strings.Repeat("=", len(ua.UA())))
-        fmt.Println("Name:", ua.Name, "v", ua.Version)
+        fmt.Println("Name:", ua.Name(), "v", ua.Version())
         fmt.Println("OS:", ua.OS(), "v", ua.OSVersion())
-        fmt.Println("Device:", ua.Device)
+        fmt.Println("Device:", ua.Device())
         if ua.Mobile() {
             fmt.Println("(Mobile)")
         }
@@ -64,8 +64,8 @@ func main() {
         if ua.Bot() {
             fmt.Println("(Bot)")
         }
-        if ua.URL != "" {
-            fmt.Println(ua.URL)
+        if ua.URL() != "" {
+            fmt.Println(ua.URL())
         }
         fmt.Printf("%v\n", ua.Mobile())   // => true
         fmt.Printf("%v\n", ua.Bot())      // => false
