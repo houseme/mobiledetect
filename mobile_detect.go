@@ -156,7 +156,7 @@ func (md *MobileDetect) IsTablet() bool {
 	return false
 }
 
-// IsKey  Is compared the detected browser with a "rule" from the existing rules list
+// IsKey Is compared the detected browser with a "rule" from the existing rules list
 func (md *MobileDetect) IsKey(key int) bool {
 	return md.matchUAAgainstKey(key)
 }

@@ -155,7 +155,7 @@ func BasicMethodsData() []basicMethodsStruct {
 				},
 				basicMethodsStructCustomValue{
 					name:  "ios",
-					value: true,
+					value: false,
 				},
 				basicMethodsStructCustomValue{
 					name:  "whatever",
@@ -192,7 +192,7 @@ func BasicMethodsData() []basicMethodsStruct {
 				},
 				basicMethodsStructCustomValue{
 					key:   IOS,
-					value: true,
+					value: false,
 				},
 				basicMethodsStructCustomValue{
 					key:   9999999,
