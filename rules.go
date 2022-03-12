@@ -228,7 +228,8 @@ var (
 		`Asus.*Galaxy|PadFone.*mobile|ASUS_Z01QD`,
 		// Xiaomi:
 		// `^*xiaomi.*$|POCOPHONE F1|MI 8|Redmi Note 9S|Redmi Note 5A Prime|N2G47H|M2001J2G|M2001J2I|M1805E10A|M2004J11G|M1902F1G|M2002J9G|M2004J19G|M2003J6A1G｜mi|m1|m2|m3|m4|hm`,
-		`(?is)^(*\bx11\b).*xiaomi.*$|POCOPHONE F1|\bMI\b 8|\bMi\b 10|Redmi Note 9S|Redmi 5A|Redmi Note 5A Prime|Redmi Note 7 Pro|N2G47H|M2001J2G|M2001J2I|M1805E10A|M2004J11G|M1902F1G|M2002J9G|M2004J19G|M2003J6A1G|M2012K11C|MiuiBrowser`,
+		// `^(*\bx11\b).*xiaomi.*$|POCOPHONE F1|\bMI\b 8|\bMi\b 10|Redmi Note 9S|Redmi 5A|Redmi Note 5A Prime|Redmi Note 7 Pro|N2G47H|M2001J2G|M2001J2I|M1805E10A|M2004J11G|M1902F1G|M2002J9G|M2004J19G|M2003J6A1G|M2012K11C|MiuiBrowser`,
+		`(xiaomi|MiuiBrowser|POCOPHONE|android[\\s\\d\\.;]{7,10}hm\\s|(hm[\\s\\-]note?[\\s]*(?:\\d\\w)?)|android.+(mi[\\s\\-_]*(?:one|one[\\s_]plus)?[\\s_]*(?:\\d\\w)?)\\s+build|android.+mi\\s\\w+\\s|(MI [a-z0-9]+|MI-One[ _]?[a-z0-9]+)[);/ ]|HM ([^/;]+) Build|(2014501|2014011|201481[13]|201302[23]|2013061) Build|Redmi)`,
 		// NOKIA:
 		`Lumia [0-9]{3,4}`,
 		// @ref: http://www.micromaxinfo.com/mobiles/smartphones
