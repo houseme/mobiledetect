@@ -3,75 +3,10 @@ package ua
 import (
 	"bytes"
 	"fmt"
-	"regexp"
 	"strings"
 )
 
-// A section contains the name of the product, its version and
-// an optional comment.
-type section struct {
-	name    string
-	version string
-	comment []string
-}
-
-// UserAgent struct containing all data extracted from parsed user-agent string
-type UserAgent struct {
-	name         string
-	version      string
-	os           string
-	osVersion    string
-	shortOS      string
-	device       string
-	mobile       bool
-	tablet       bool
-	desktop      bool
-	bot          bool
-	url          string
-	ua           string
-	platform     string
-	browser      Browser
-	mozilla      string
-	localization string
-	undecided    bool
-}
-
-var ignore = map[string]struct{}{
-	"KHTML, like Gecko": {},
-	"U":                 {},
-	"compatible":        {},
-	"Mozilla":           {},
-	"WOW64":             {},
-}
-
-// Constants for browsers and operating systems for easier comparison
-const (
-	Windows      = "Windows"
-	WindowsPhone = "Windows Phone"
-	Android      = "Android"
-	MacOS        = "macOS"
-	IOS          = "iOS"
-	Linux        = "Linux"
-	ChromeOS     = "CrOS"
-
-	Opera            = "Opera"
-	OperaMini        = "Opera Mini"
-	OperaTouch       = "Opera Touch"
-	Chrome           = "Chrome"
-	Firefox          = "Firefox"
-	InternetExplorer = "Internet Explorer"
-	Safari           = "Safari"
-	Edge             = "Edge"
-	Vivaldi          = "Vivaldi"
-
-	Googlebot           = "Googlebot"
-	Twitterbot          = "Twitterbot"
-	FacebookExternalHit = "facebookexternalhit"
-	Applebot            = "Applebot"
-)
-
-// New parses the given User-Agent string and get the resulting UserAgent
-// object.
+// New parses the given User-Agent string and get the resulting UserAgent object.
 //
 // Returns a UserAgent object that has been initialized after parsing
 // the given User-Agent string.
@@ -333,7 +268,6 @@ func parse(userAgent string) (clients properties) {
 	bua := []byte(userAgent)
 	for i, c := range bua {
 
-		// fmt.Println(string(c), c)
 		switch {
 		case c == 41: // )
 			addToken()
@@ -374,8 +308,6 @@ func checkVer(s string) (name, v string) {
 	if i == -1 {
 		return s, ""
 	}
-
-	// v = s[i+1:]
 
 	switch s[:i] {
 	case "Linux", "Windows NT", "Windows Phone OS", "MSIE", "Android":
@@ -418,7 +350,7 @@ func (p properties) findMacOSVersion() string {
 }
 
 // findBestMatch from the rest of the bunch
-// in first cycle only return key with version value
+//  in the first cycle only return key with version value
 // if withVerValue is false, do another cycle and return any token
 func (p properties) findBestMatch(withVerOnly bool) string {
 	n := 2
@@ -442,8 +374,6 @@ func (p properties) findBestMatch(withVerOnly bool) string {
 	}
 	return ""
 }
-
-var rxMacOSVer = regexp.MustCompile(`[_\d\.]+`)
 
 func findVersion(s string) string {
 	if ver := rxMacOSVer.FindString(s); ver != "" {
@@ -557,10 +487,8 @@ func (ua *UserAgent) detectDevice(s section) {
 	}
 }
 
-var botFromSiteRegexp = regexp.MustCompile(`http[s]?://.+\.\w+`)
-
-// Get the name of the bot from the website that may be in the given comment. If
-// there is no website in the comment, then an empty string is returned.
+// Get the name of the bot from the website that may be in the given comment.
+// If there is no website in the comment, then an empty string is returned.
 func getFromSite(comment []string) string {
 	if len(comment) == 0 {
 		return ""
@@ -589,9 +517,8 @@ func getFromSite(comment []string) string {
 	return ""
 }
 
-// Returns true if the info that we currently have corresponds to the Google
-// or Bing mobile bot. This function also modifies some attributes in the receiver
-// accordingly.
+// Returns true if the info that we currently have corresponds to the Google or Bing mobile bot.
+// This function also modifies some attributes in the receiver accordingly.
 func (ua *UserAgent) googleOrBingBot() bool {
 	// This is a hackish way to detect
 	// Google's mobile bot (Googlebot, AdsBot-Google-Mobile, etc.)
@@ -605,11 +532,12 @@ func (ua *UserAgent) googleOrBingBot() bool {
 	return ua.undecided
 }
 
-// Returns true if we think that it is iMessage-Preview. This function also
-// modifies some attributes in the receiver accordingly.
+// Returns true if we think that it is iMessage-Preview.
+// This function also modifies some attributes in the receiver accordingly.
 func (ua *UserAgent) iMessagePreview() bool {
-	// iMessage-Preview doesn't advertise itself. We have a to rely on a hack
-	// to detect it: it impersonates both facebook and twitter bots.
+	// iMessage-Preview doesn't advertise itself.
+	// We have a to rely on a hack
+	// to detect it: it impersonates both facebook and Twitter bots.
 	// See https://medium.com/@siggi/apples-imessage-impersonates-twitter-facebook-bots-when-scraping-cef85b2cbb7d
 	if !strings.Contains(ua.ua, "facebookexternalhit") {
 		return false
@@ -625,8 +553,8 @@ func (ua *UserAgent) iMessagePreview() bool {
 	return true
 }
 
-// Set the attributes of the receiver as given by the parameters. All the other
-// parameters are set to empty.
+// Set the attributes of the receiver as given by the parameters.
+// All the other parameters are set to empty.
 func (ua *UserAgent) setSimple(name, version string, bot bool) {
 	ua.bot = bot
 	if !bot {
@@ -649,12 +577,10 @@ func (ua *UserAgent) fixOther(sections []section) {
 	}
 }
 
-var botRegex = regexp.MustCompile("(?i)(bot|crawler|sp(i|y)der|search|worm|fetch|nutch)")
-
-// Check if we're dealing with a bot or with some weird browser. If that is the
-// case, the receiver will be modified accordingly.
+// Check if we're dealing with a bot or with some weird browser.
+// If that is the case, the receiver will be modified accordingly.
 func (ua *UserAgent) checkBot(sections []section) {
-	// If there's only one element, and it's doesn't have the Mozilla string,
+	// If there's only one element, and it doesn't have the Mozilla string,
 	// check whether this is a bot or not.
 	if len(sections) == 1 && sections[0].name != "Mozilla" {
 		ua.mozilla = ""
@@ -667,14 +593,15 @@ func (ua *UserAgent) checkBot(sections []section) {
 
 		// Tough luck, let's try to see if it has a website in his comment.
 		if name := getFromSite(sections[0].comment); name != "" {
-			// First of all, this is a bot. Moreover, since it doesn't have the
-			// Mozilla string, we can assume that the name and the version are
+			// First, this is a bot.
+			// Moreover, since it doesn't have the Mozilla string,
+			// we can assume that the name and the version are
 			// the ones from the first section.
 			ua.setSimple(sections[0].name, sections[0].version, true)
 			return
 		}
 
-		// At this point we are sure that this is not a bot, but some weirdo.
+		// At this point, we are sure that this is not a bot, but some weirdo.
 		ua.setSimple(sections[0].name, sections[0].version, false)
 	} else {
 		// Let's iterate over the available comments and check for a website.
@@ -716,7 +643,7 @@ func (ua *UserAgent) OSVersion() string {
 	return ua.osVersion
 }
 
-// Device returns a string containing the Phone Model like "Nexus 5X".
+// Device The Device returns a string containing the Phone Model like "Nexus 5X".
 func (ua *UserAgent) Device() string {
 	return ua.device
 }
@@ -757,7 +684,7 @@ func (ua *UserAgent) UA() string {
 	return ua.ua
 }
 
-// Platform returns a string containing the platform..
+// Platform returns a string containing the platform.
 func (ua *UserAgent) Platform() string {
 	return ua.platform
 }
@@ -772,19 +699,14 @@ func (ua *UserAgent) Localization() string {
 	return ua.localization
 }
 
-// New parses the given User-Agent string and get the resulting UserAgent
-// object.
-//
-// Returns an UserAgent object that has been initialized after parsing
-// the given User-Agent string.
-// func New(ua string) *UserAgent {
-// 	o := &UserAgent{}
-// 	o.Parse(ua)
-// 	return o
-// }
+// ShortOS returns the short name of the operating system.
+func (ua *UserAgent) ShortOS() string {
+	return ua.shortOS
+}
 
-// Parse the given User-Agent string. After calling this function, the
-// receiver will be setted up with all the information that we've extracted.
+// Parse the given User-Agent string.
+// After calling this function,
+// the receiver will be set up with all the information that we've extracted.
 func (ua *UserAgent) Parse(str string) {
 	var sections []section
 
@@ -813,9 +735,9 @@ func (ua *UserAgent) Parse(str string) {
 // Read from the given string until the given delimiter or the
 // end of the string have been reached.
 //
-// The first argument is the user agent string being parsed. The second
-// argument is a reference pointing to the current index of the user agent
-// string. The delimiter argument specifies which character is the delimiter
+// The first argument is the user agent string being parsed.
+// The second argument is a reference pointing to the current index of the user agent string.
+// The delimiter argument specifies which character is the delimiter
 // and the cat argument determines whether nested '(' should be ignored or not.
 //
 // Returns an array of bytes containing what has been read.
@@ -843,8 +765,9 @@ func readUntil(ua string, index *int, delimiter byte, cat bool) []byte {
 // Parse the given product, that is, just a name or a string
 // formatted as Name/Version.
 //
-// It returns two strings. The first string is the name of the product and the
-// second string contains the version of the product.
+// It returns two strings.
+// The first string is the name of the product,
+// and the second string contains the version of the product.
 func parseProduct(product []byte) (string, string) {
 	prod := strings.SplitN(string(product), "/", 2)
 	if len(prod) == 2 {
@@ -853,12 +776,12 @@ func parseProduct(product []byte) (string, string) {
 	return string(product), ""
 }
 
-// Parse a section. A section is typically formatted as follows
-// "Name/Version (comment)". Both the comments and the version are optional.
+// Parse a section.
+// A section is typically formatted as follows "Name/Version (comment)".
+// Both the comments and the version are optional.
 //
-// The first argument is the user agent string being parsed. The second
-// argument is a reference pointing to the current index of the user agent
-// string.
+// The first argument is the user agent string being parsed.
+// The second argument is a reference pointing to the current index of the user agent string.
 //
 // Returns a section containing the information that we could extract
 // from the last parsed section.
@@ -905,13 +828,12 @@ func (ua *UserAgent) initialize() {
 }
 
 // Beautify the given string.
-// Internal: beautify the UserAgent reference into a string so it can be
-// tested later on.
+// Internal: beautify the UserAgent reference into a string, so it can be tested later on.
 //
 // ua - a UserAgent reference.
 //
 // Returns a string that contains the beautified representation.
-func Beautify(ua *UserAgent) (s string) {
+func (ua *UserAgent) Beautify() (s string) {
 	if len(ua.Mozilla()) > 0 {
 		s += "Mozilla:" + ua.Mozilla() + " "
 	}
@@ -948,9 +870,4 @@ func Beautify(ua *UserAgent) (s string) {
 	s += "Bot:" + fmt.Sprintf("%v", ua.Bot()) + " "
 	s += "Mobile:" + fmt.Sprintf("%v", ua.Mobile())
 	return s
-}
-
-// ShortOS returns the short name of the operating system.
-func (ua *UserAgent) ShortOS() string {
-	return ua.shortOS
 }

@@ -1,32 +1,13 @@
 package ua
 
 import (
-	"regexp"
 	"strings"
 )
-
-var ie11Regexp = regexp.MustCompile("^rv:(.+)$")
-
-// Browser is a struct containing all the information that we might be
-// interested from the browser.
-type Browser struct {
-	// The name of the browser's engine.
-	Engine string
-
-	// The version of the browser's engine.
-	EngineVersion string
-
-	// The name of the browser.
-	Name string
-
-	// The version of the browser.
-	Version string
-}
 
 // Extract all the information that we can get from the User-Agent string
 // about the browser and update the receiver with this information.
 //
-// The function receives just one argument "sections", that contains the
+// The function receives just one argument "sections", which contains the
 // sections from the User-Agent string after being parsed.
 func (ua *UserAgent) detectBrowser(sections []section) {
 	slen := len(sections)
@@ -40,7 +21,7 @@ func (ua *UserAgent) detectBrowser(sections []section) {
 		}
 	} else if sections[0].name == "Dalvik" {
 		// When Dalvik VM is in use, there is no browser info attached to ua.
-		// Although browser is still a Mozilla/5.0 compatible.
+		// Although the browser is still a Mozilla/5.0 compatible.
 		ua.mozilla = "5.0"
 	} else if slen > 1 {
 		engine := sections[1]
@@ -173,15 +154,16 @@ func (ua *UserAgent) detectBrowser(sections []section) {
 	}
 }
 
-// Engine returns two strings.
-// The first string is the name of the engine and the
-// second one is the version of the engine.
+// Engine The Engine returns two strings.
+// The first string is the name of the engine,
+// and the second one is the version of the engine.
 func (ua *UserAgent) Engine() (string, string) {
 	return ua.browser.Engine, ua.browser.EngineVersion
 }
 
-// Browser returns two strings. The first string is the name of the browser and the
-// second one is the version of the browser.
+// Browser returns two strings.
+// The first string is the name of the browser,
+// and the second one is the version of the browser.
 func (ua *UserAgent) Browser() (string, string) {
 	return ua.browser.Name, ua.browser.Version
 }

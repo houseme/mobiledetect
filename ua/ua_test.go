@@ -887,7 +887,7 @@ var uastrings = []struct {
 func TestUserAgent(t *testing.T) {
 	for _, tt := range uastrings {
 		uas := ua.New(tt.ua)
-		got := ua.Beautify(uas)
+		got := uas.Beautify()
 		if tt.expected != got {
 			t.Error(tt.ua)
 			t.Errorf("\nTest     %v\ngot:     %q\nexpected %q\n", tt.title, got, tt.expected)
@@ -908,9 +908,10 @@ func BenchmarkUserAgent(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
 		for _, tt := range uastrings {
-			ua := new(ua.UserAgent)
+			// ua := ua.New(tt.ua) // new(ua.UserAgent)
+			ua.New(tt.ua)
 			b.StartTimer()
-			ua.Parse(tt.ua)
+			// ua.Parse(tt.ua)
 		}
 	}
 }

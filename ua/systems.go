@@ -8,22 +8,8 @@ import (
 	"strings"
 )
 
-// OSInfo represents full information on the operating system extracted from the
-// user agent.
-type OSInfo struct {
-	// Full name of the operating system. This is identical to the output of ua.OS()
-	FullName string
-
-	// Name of the operating system. This is sometimes a shorter version of the
-	// operating system name, e.g. "Mac OS X" instead of "Intel Mac OS X"
-	Name string
-
-	// Operating system version, e.g. 7 for Windows 7 or 10.8 for Max OS X Mountain Lion
-	Version string
-}
-
-// Normalize the name of the operating system. By now, this just
-// affects to Windows NT.
+// Normalize the name of the operating system.
+// By now, this just affects Windows NT.
 //
 // Returns a string containing the normalized name for the Operating System.
 func normalizeOS(name string) string {
@@ -58,8 +44,8 @@ func normalizeOS(name string) string {
 // Guess the OS, the localization and if this is a mobile device for a
 // Webkit-powered browser.
 //
-// The first argument p is a reference to the current UserAgent and the second
-// argument is a slice of strings containing the comment.
+// The first argument p is a reference to the current UserAgent,
+// and the second argument is a slice of strings containing the comment.
 func webkit(ua *UserAgent, comment []string) {
 	if ua.platform == "webOS" {
 		ua.browser.Name = ua.platform
@@ -127,8 +113,8 @@ func webkit(ua *UserAgent, comment []string) {
 // Guess the OS, the localization and if this is a mobile device
 // for a Gecko-powered browser.
 //
-// The first argument p is a reference to the current UserAgent and the second
-// argument is a slice of strings containing the comment.
+// The first argument p is a reference to the current UserAgent,
+// and the second argument is a slice of strings containing the comment.
 func gecko(ua *UserAgent, comment []string) {
 	if len(comment) > 1 {
 		if comment[1] == "U" || comment[1] == "arm_64" {
@@ -150,19 +136,18 @@ func gecko(ua *UserAgent, comment []string) {
 				}
 			}
 		}
-		// Only parse 4th comment as localization if it doesn't start with rv:.
-		// For example Firefox on Ubuntu contains "rv:XX.X" in this field.
+		// Only parse 4th comment as localization if it doesn't start with rv: .
+		// For example, Firefox on Ubuntu contains "rv:XX.X" in this field.
 		if len(comment) > 3 && !strings.HasPrefix(comment[3], "rv:") {
 			ua.localization = comment[3]
 		}
 	}
 }
 
-// Guess the OS, the localization and if this is a mobile device
-// for Internet Explorer.
+// Guess the OS, the localization and if this is a mobile device for Internet Explorer.
 //
-// The first argument p is a reference to the current UserAgent and the second
-// argument is a slice of strings containing the comment.
+// The first argument p is a reference to the current UserAgent,
+// and the second argument is a slice of strings containing the comment.
 func trident(ua *UserAgent, comment []string) {
 	// Internet Explorer only runs on Windows.
 	ua.platform = "Windows"
@@ -185,11 +170,10 @@ func trident(ua *UserAgent, comment []string) {
 	}
 }
 
-// Guess the OS, the localization and if this is a mobile device
-// for Opera.
+// Guess the OS, the localization and if this is a mobile device for Opera.
 //
-// The first argument p is a reference to the current UserAgent and the second
-// argument is a slice of strings containing the comment.
+// The first argument p is a reference to the current UserAgent,
+// and the second argument is a slice of strings containing the comment.
 func opera(ua *UserAgent, comment []string) {
 	slen := len(comment)
 
@@ -219,11 +203,11 @@ func opera(ua *UserAgent, comment []string) {
 	}
 }
 
-// Guess the OS. Android browsers send Dalvik as the user agent in the
-// request header.
+// Guess the OS.
+// Android browsers send Dalvik as the user agent in the request header.
 //
-// The first argument p is a reference to the current UserAgent and the second
-// argument is a slice of strings containing the comment.
+// The first argument p is a reference to the current UserAgent,
+// and the second argument is a slice of strings containing the comment.
 func dalvik(ua *UserAgent, comment []string) {
 	slen := len(comment)
 
@@ -267,7 +251,7 @@ func (ua *UserAgent) detectOS(s section) {
 			ua.os = normalizeOS(s.comment[0])
 		}
 
-		// And finally get the OS depending on the engine.
+		// And finally, get the OS depending on the engine.
 		switch ua.browser.Engine {
 		case "":
 			ua.undecided = true
