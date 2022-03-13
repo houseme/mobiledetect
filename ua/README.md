@@ -1,7 +1,7 @@
 # Go/Golang package for parsing user agent strings
 [![GoDoc](https://pkg.go.dev/badge/github.com/houseme/mobiledetect.svg)](https://pkg.go.dev/github.com/houseme/mobiledetect)
 
-Package `ua.Parse(userAgent string)` function parses browser's and bot's user agents strings and determins:
+Package `ua.New(userAgent string)` function parses browser's and bot's user agents strings and determins:
 + User agent name and version (Chrome, Firefox, Googlebot, etc.)
 + Operating system name and version  (Windows, Android, iOS etc.)
 + Device type (mobile, desktop, tablet, bot)
@@ -10,13 +10,13 @@ Package `ua.Parse(userAgent string)` function parses browser's and bot's user ag
 
 ## Status
 
-Still need some work on detecting Andorid device names.
+Still need some work on detecting Android device names.
 
 Fill free to report an issue for any User-Agent string not recognized or misinterpreted.
 
 ## Installation <a id="installation"></a>
 ```shell
-go get -u -v github.com/houseme/mobiledetect
+go get -u -v github.com/houseme/mobiledetect/ua
 ```
 
 ## Example<a id="example"></a>
@@ -94,23 +94,21 @@ func main() {
         fmt.Printf("%v\n", version)       // => 2.1
     }
 }
-
-
 ```
 
 ### Shorthand functions
 
-Beside `UserAgent{}` struct and its properties returned by `ua.Parse()`, there is a bunch of shorthand functions for most popular browsers and operating systems, so this code:
+Beside `UserAgent{}` struct and its properties returned by `ua.New()`, there is a bunch of shorthand functions for the most popular browsers and operating systems, so this code:
 
 ```go
-    ua := ua.Parse(userAgentString)
+    ua := ua.New(userAgentString)
     if ua.OS == "Android" && ua.Name == "Chrome" {
         // do something
     }
 ```
-can be also written on this way:
+can be written in this way:
 ```go
-    ua := ua.Parse(userAgentString)
+    ua := ua.New(userAgentString)
     if ua.IsAndroid() && ua.IsChrome() {
         // do something
     }
@@ -119,7 +117,7 @@ can be also written on this way:
 ### Notice
 
 + Opera and Opera Mini are two browsers, since they operate on very different ways.
-+ If Googlebot (or any other bot) is detected and it is using its mobile crawler, both `bot` and `mobile` flags will be set to `true`.
++ If Googlebot (or any other bot) is detected, and it is using its mobile crawler, both `bot` and `mobile` flags will be set to `true`.
 
 
 ### License

@@ -302,7 +302,7 @@ func osName(osSplit []string) (name, version string) {
 		name = osSplit[0]
 		version = ""
 	} else {
-		// Assume version is stored in the last part of the array.
+		// Assume a version is stored in the last part of the array.
 		nameSplit := osSplit[:len(osSplit)-1]
 		version = osSplit[len(osSplit)-1]
 
@@ -316,7 +316,7 @@ func osName(osSplit []string) (name, version string) {
 			// x86_64 and i868 are not Linux versions but architectures
 			version = ""
 		} else if version == "X" && name == "Mac OS" {
-			// X is not a version for Mac OS.
+			// X is not a version for macOS.
 			name = name + " " + version
 			version = ""
 		}

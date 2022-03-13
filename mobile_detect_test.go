@@ -50,6 +50,7 @@ func (h *basicMethodsStruct) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.handlerCalled = Device(r)
 }
 
+// BasicMethodsData is a struct that contains the data for the basic methods tests
 func BasicMethodsData() []basicMethodsStruct {
 	return []basicMethodsStruct{
 		basicMethodsStruct{
@@ -272,6 +273,7 @@ func QuickHeadersData() []map[string]string {
 	return headers
 }
 
+// TestQuickHeaders .
 func TestQuickHeaders(t *testing.T) {
 	detect := New(httpRequest, nil)
 	detect.PreCompileRegexRules()
@@ -311,6 +313,7 @@ type versionDataStruct struct {
 	floatVersion float64
 }
 
+// VersionData databases in the database of user agents
 func VersionData() []versionDataStruct {
 	v := []versionDataStruct{
 		versionDataStruct{

@@ -79,7 +79,7 @@ func (ua *UserAgent) detectBrowser(sections []section) {
 					ua.browser.Name = "Opera"
 					ua.browser.Version = sections[slen-1].version
 				case "mobile":
-					ua.browser.Name = "mobile App"
+					ua.browser.Name = "Mobile App"
 					ua.browser.Version = ""
 				default:
 					switch sections[slen-3].name {

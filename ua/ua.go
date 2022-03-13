@@ -453,77 +453,77 @@ func findVersion(s string) string {
 }
 
 // IsWindows shorthand function to check if OS == Windows
-func (ua UserAgent) IsWindows() bool {
+func (ua *UserAgent) IsWindows() bool {
 	return ua.os == Windows
 }
 
 // IsAndroid shorthand function to check if OS == Android
-func (ua UserAgent) IsAndroid() bool {
+func (ua *UserAgent) IsAndroid() bool {
 	return ua.os == Android
 }
 
 // IsMacOS shorthand function to check if OS == MacOS
-func (ua UserAgent) IsMacOS() bool {
+func (ua *UserAgent) IsMacOS() bool {
 	return ua.os == MacOS
 }
 
 // IsIOS shorthand function to check if OS == IOS
-func (ua UserAgent) IsIOS() bool {
+func (ua *UserAgent) IsIOS() bool {
 	return ua.os == IOS
 }
 
 // IsLinux shorthand function to check if OS == Linux
-func (ua UserAgent) IsLinux() bool {
+func (ua *UserAgent) IsLinux() bool {
 	return ua.os == Linux
 }
 
 // IsOpera shorthand function to check if name == Opera
-func (ua UserAgent) IsOpera() bool {
+func (ua *UserAgent) IsOpera() bool {
 	return ua.name == Opera
 }
 
 // IsOperaMini shorthand function to check if name == Opera Mini
-func (ua UserAgent) IsOperaMini() bool {
+func (ua *UserAgent) IsOperaMini() bool {
 	return ua.name == OperaMini
 }
 
 // IsChrome shorthand function to check if name == Chrome
-func (ua UserAgent) IsChrome() bool {
+func (ua *UserAgent) IsChrome() bool {
 	return ua.name == Chrome
 }
 
 // IsFirefox shorthand function to check if name == Firefox
-func (ua UserAgent) IsFirefox() bool {
+func (ua *UserAgent) IsFirefox() bool {
 	return ua.name == Firefox
 }
 
 // IsInternetExplorer shorthand function to check if name == Internet Explorer
-func (ua UserAgent) IsInternetExplorer() bool {
+func (ua *UserAgent) IsInternetExplorer() bool {
 	return ua.name == InternetExplorer
 }
 
 // IsSafari shorthand function to check if name == Safari
-func (ua UserAgent) IsSafari() bool {
+func (ua *UserAgent) IsSafari() bool {
 	return ua.name == Safari
 }
 
 // IsEdge shorthand function to check if name == Edge
-func (ua UserAgent) IsEdge() bool {
+func (ua *UserAgent) IsEdge() bool {
 	return ua.name == Edge
 }
 
 // IsGoogleBot shorthand function to check if name == Googlebot
-func (ua UserAgent) IsGoogleBot() bool {
+func (ua *UserAgent) IsGoogleBot() bool {
 	return ua.name == Googlebot
 }
 
 // IsTwitterBot shorthand function to check if name == Twitterbot
-func (ua UserAgent) IsTwitterBot() bool {
+func (ua *UserAgent) IsTwitterBot() bool {
 	return ua.name == Twitterbot
 }
 
 // IsFacebookBot shorthand function to check if name == FacebookExternalHit
-func (ua UserAgent) IsFacebookBot() bool {
+func (ua *UserAgent) IsFacebookBot() bool {
 	return ua.name == FacebookExternalHit
 }
 
@@ -796,7 +796,6 @@ func (ua *UserAgent) Parse(str string) {
 		}
 		sections = append(sections, s)
 	}
-
 	if len(sections) > 0 {
 		if sections[0].name == "Mozilla" {
 			ua.mozilla = sections[0].version
@@ -855,7 +854,7 @@ func parseProduct(product []byte) (string, string) {
 }
 
 // Parse a section. A section is typically formatted as follows
-// "Name/Version (comment)". Both, the comment and the version are optional.
+// "Name/Version (comment)". Both the comments and the version are optional.
 //
 // The first argument is the user agent string being parsed. The second
 // argument is a reference pointing to the current index of the user agent

@@ -125,6 +125,7 @@ func TestParse(t *testing.T) {
 
 }
 
+// ExampleParse .
 func ExampleParse() {
 	userAgents := []string{
 		// Mac
