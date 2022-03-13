@@ -55,23 +55,23 @@ type section struct {
 
 // UserAgent struct containing all data extracted from parsed user-agent string
 type UserAgent struct {
-	name         string
-	version      string
-	os           string
-	osVersion    string
-	shortOS      string
-	device       string
-	mobile       bool
-	tablet       bool
-	desktop      bool
-	bot          bool
-	url          string
-	ua           string
-	platform     string
-	browser      Browser
-	mozilla      string
-	localization string
-	undecided    bool
+	name         string  // browser name
+	version      string  // browser version
+	os           string  // operating system
+	osVersion    string  // operating system version
+	shortOS      string  // short operating system name
+	device       string  // device type
+	mobile       bool    // is mobile device
+	tablet       bool    // is tablet device
+	desktop      bool    // is desktop device
+	bot          bool    // is bot
+	url          string  // url of the site
+	ua           string  // user-agent string
+	platform     string  // platform
+	browser      Browser // browser
+	mozilla      string  // mozilla version
+	localization string  // localization language
+	undecided    bool    // is browser not decided?
 }
 
 // Browser The browser is a struct containing all the information that we might be

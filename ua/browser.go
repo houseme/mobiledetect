@@ -11,7 +11,6 @@ import (
 // sections from the User-Agent string after being parsed.
 func (ua *UserAgent) detectBrowser(sections []section) {
 	slen := len(sections)
-
 	if sections[0].name == "Opera" {
 		ua.browser.Name = "Opera"
 		ua.browser.Version = sections[0].version
@@ -59,7 +58,7 @@ func (ua *UserAgent) detectBrowser(sections []section) {
 				case "OPR":
 					ua.browser.Name = "Opera"
 					ua.browser.Version = sections[slen-1].version
-				case "mobile":
+				case "Mobile":
 					ua.browser.Name = "Mobile App"
 					ua.browser.Version = ""
 				default:

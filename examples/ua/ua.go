@@ -11,23 +11,34 @@ func main() {
 	// The "New" function will create a new UserAgent object and it will parse
 	// the given string. If you need to parse more strings, you can re-use
 	// this object and call: ua.Parse("another string")
-	ua := ua.New("Mozilla/5.0 (Linux; U; Android 2.3.7; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1")
+	// ua := ua.New("Mozilla/5.0 (Linux; U; Android 2.3.7; en-us; Nexus One Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1")
+	ua := ua.New("Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_2 like Mac OS X) AppleWebKit/603.2.4 (KHTML, like Gecko) Version/10.0 mobile/14F89 Safari/602.1")
+	fmt.Printf("UserAgent: %s\n", ua.UA())
+	fmt.Printf("%v\n", ua.Mobile())           // => true
+	fmt.Printf("%v\n", ua.Bot())              // => false
+	fmt.Printf("Mozilla: %v\n", ua.Mozilla()) // => "5.0"
+	fmt.Printf("Device: %v\n", ua.Device())   // => "Nexus One"
 
-	fmt.Printf("%v\n", ua.Mobile())  // => true
-	fmt.Printf("%v\n", ua.Bot())     // => false
-	fmt.Printf("%v\n", ua.Mozilla()) // => "5.0"
-	fmt.Printf("%v\n", ua.Device())  // => "Nexus One"
+	fmt.Printf("Platform: %v\n", ua.Platform()) // => "Linux"
+	fmt.Printf("OS: %v\n", ua.OS())             // => "Android 2.3.7"
 
-	fmt.Printf("%v\n", ua.Platform()) // => "Linux"
-	fmt.Printf("%v\n", ua.OS())       // => "Android 2.3.7"
+	fmt.Printf("Name: %v\n", ua.Name())       // => "Android 2.3.7"
+	fmt.Printf("Version: %v\n", ua.Version()) // => "Android 2.3.7"
+
+	fmt.Printf("ShortOS: %v\n", ua.ShortOS())     // => "Android 2.3.7"
+	fmt.Printf("OSVersion: %v\n", ua.OSVersion()) // => "Android 2.3.7"
 
 	name, version := ua.Engine()
-	fmt.Printf("%v\n", name)    // => "AppleWebKit"
-	fmt.Printf("%v\n", version) // => "533.1"
+	fmt.Printf("Engine name: %v\n", name)       // => "AppleWebKit"
+	fmt.Printf("Engine version: %v\n", version) // => "533.1"
 
 	name, version = ua.Browser()
-	fmt.Printf("%v\n", name)    // => "Android"
-	fmt.Printf("%v\n", version) // => "4.0"
+	fmt.Printf("Browser name: %v\n", name)       // => "Android"
+	fmt.Printf("Browser version: %v\n", version) // => "4.0"
+
+	fmt.Printf("user-agent string: %v\n", ua.Beautify()) // => "AppleWebKit 533.1"
+
+	fmt.Printf("========================\n")
 
 	// Let's see an example with a bot.
 
@@ -36,8 +47,8 @@ func main() {
 	fmt.Printf("%v\n", ua.Bot()) // => true
 
 	name, version = ua.Browser()
-	fmt.Printf("%v\n", name)    // => Googlebot
-	fmt.Printf("%v\n", version) // => 2.1
+	fmt.Printf("Browser name: %v\n", name)       // => Googlebot
+	fmt.Printf("Browser version: %v\n", version) // => 2.1
 	uaEx()
 }
 
@@ -92,12 +103,13 @@ func uaEx() {
 		fmt.Printf("Engine.Version: %v\n", version) // => "533.1"
 
 		name, version = ua.Browser()
-		fmt.Printf("Browser.Name: %v\n", name)       // => "Android"
-		fmt.Printf("Browser.version: %v\n", version) // => "4.0"
-
+		fmt.Printf("Browser.Name: %v\n", name)               // => "Android"
+		fmt.Printf("Browser.version: %v\n", version)         // => "4.0"
+		fmt.Printf("user-agent string: %v\n", ua.Beautify()) // => "AppleWebKit 533.1"
+		fmt.Printf("========================\n")
 		// Let's see an example with a bot.
 
-		ua.Parse("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+		ua.Parse("Mozilla/5.0 (compatible; Googlebot/2.1; +https://www.google.com/bot.html)")
 
 		fmt.Printf("Bot: %v\n", ua.Bot()) // => true
 

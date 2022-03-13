@@ -244,7 +244,8 @@ func getPlatform(comment []string) string {
 func (ua *UserAgent) detectOS(s section) {
 	ua.os = ""
 	if s.name == "Mozilla" {
-		// Get the platform here. Be aware that IE11 provides a new format
+		// Get the platform here.
+		// Be aware that IE11 provides a new format
 		// that is not backwards-compatible with previous versions of IE.
 		ua.platform = getPlatform(s.comment)
 		if ua.platform == "Windows" && len(s.comment) > 0 {
