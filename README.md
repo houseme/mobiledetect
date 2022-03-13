@@ -28,7 +28,7 @@ go get -u -v github.com/houseme/mobiledetect
 
 ### Updates 
 
-Version 1.2.0
+Version 1.2.1
 
 
 ### Why is it useful?

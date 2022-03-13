@@ -200,7 +200,7 @@ var uastrings = []struct {
 	{
 		title:    "GoogleBotSmartphone (iPhone)",
 		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25 (compatible; Googlebot/2.1; +https://www.google.com/bot.html)",
-		expected: "Mozilla:5.0 Browser:Googlebot-2.1 Bot:true Mobile:true",
+		expected: "Mozilla:5.0 Device:iPhone Browser:Googlebot-2.1 Bot:true Mobile:true",
 	},
 	{
 		title:    "GoogleBotSmartphone (Android)",
@@ -220,7 +220,7 @@ var uastrings = []struct {
 	{
 		title:    "BingBotSmartphone(iPhone)",
 		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53 (compatible; bingbot/2.0; +https://www.bing.com/bingbot.htm)",
-		expected: "Mozilla:5.0 Browser:bingbot-2.0 Bot:true Mobile:true",
+		expected: "Mozilla:5.0 Device:iPhone Browser:bingbot-2.0 Bot:true Mobile:true",
 	},
 	{
 		title:    "BingBotSmartphone(Android)",
@@ -290,7 +290,7 @@ var uastrings = []struct {
 	{
 		title:    "AdsBotGoogleMobile",
 		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 (compatible; AdsBot-Google-Mobile; +https://www.google.com/mobile/adsbot.html)",
-		expected: "Mozilla:5.0 Browser:AdsBot-Google-Mobile Bot:true Mobile:true",
+		expected: "Mozilla:5.0 Device:iPhone Browser:AdsBot-Google-Mobile Bot:true Mobile:true",
 	},
 	{
 		title:    "APIs-Google",
